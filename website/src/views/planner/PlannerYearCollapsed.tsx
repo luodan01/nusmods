@@ -8,8 +8,8 @@ import config from 'config';
 import { getSemesterName, getTotalMC } from 'utils/planner';
 import { Minus, Plus } from 'react-feather';
 import { renderMCs } from 'utils/modules';
-import PlannerSemester from './PlannerSemester';
-import styles from './PlannerYear.scss';
+import PlannerSemesterCollapsed from './PlannerSemesterCollapsed';
+import styles from './PlannerYearCollapsed.scss';
 
 type Props = Readonly<{
   name: string; // eg. iBLOCs, Year 1, etc.
@@ -28,7 +28,7 @@ type State = {
   //readonly showModuleDetails: boolean;
 };
 
-export default class PlannerYear extends PureComponent<Props, State> {
+export default class PlannerYearCollapsed extends PureComponent<Props, State> {
   state = {
     // Always display Special Terms I and II if either one has modules
     showSpecialSem: this.hasSpecialTermModules(),
@@ -40,9 +40,10 @@ export default class PlannerYear extends PureComponent<Props, State> {
     return size(semesters[3]) > 0 || size(semesters[4]) > 0;
   }
 
-  // showingModuleDetails() {
-  //   return this.props.showModuleDetails;
-  // }
+  
+//   showingModuleDetails() {
+//     return this.props.showModuleDetails;
+//   }
 
   renderHeader() {
     const { year, name, semesters } = this.props;
@@ -90,11 +91,11 @@ export default class PlannerYear extends PureComponent<Props, State> {
           {sortedSemesters.map(([semester, modules]) => (
             <div className={styles.semesterWrapper} key={semester}>
               <h3 className={styles.semesterHeader}>{getSemesterName(+semester)}</h3>
-              <PlannerSemester
+              <PlannerSemesterCollapsed
                 year={year}
                 semester={+semester}
                 modules={modules}
-                showModuleDetails={true}
+                showModuleDetails={false}
                 className={styles.semester}
                 addModule={this.props.addModule}
                 removeModule={this.props.removeModule}

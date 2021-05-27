@@ -42,7 +42,7 @@ const ModuleMenu = memo((props: Props) => {
             aria-haspopup="true"
             aria-expanded={isOpen}
           >
-            <ChevronDown />
+            <ChevronDown className = 'buttonIcon' />
           </button>
           <div
             className={classnames(styles.menu, 'dropdown-menu', { show: isOpen })}

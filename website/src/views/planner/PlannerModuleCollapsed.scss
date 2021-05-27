@@ -1,6 +1,9 @@
 @import '~styles/utils/modules-entry';
 @import 'variables';
 
+.moduleName {
+    color: inherit;
+}
 .module {
   padding: $module-padding-v $module-padding-h;
   margin-bottom: 0.4rem;
@@ -69,10 +72,11 @@
 }
 
 .moduleName {
-  margin-bottom: 0.4rem;
+  //margin-bottom: 0.4rem;
 
   a {
     color: inherit;
+    font-size: 0.9rem;
 
     &:hover {
       text-decoration: underline;
@@ -106,6 +110,7 @@
   }
 
   svg {
+    transform: scale(0.3);
     width: 1rem;
   }
 }

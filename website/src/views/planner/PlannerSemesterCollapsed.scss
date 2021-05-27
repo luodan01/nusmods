@@ -1,11 +1,11 @@
 @import '~styles/utils/modules-entry';
 @import 'variables';
 
-$empty-message-height: 6rem;
+$empty-message-height: 4.4rem;
 
 .semester {
   position: relative;
-  width: 7.5rem;//$semester-width;
+  width: 7rem;//$semester-width;
   // Prevents the semester from collapsing at the start since all children are
   // absolute positioned
   min-height: 24rem;

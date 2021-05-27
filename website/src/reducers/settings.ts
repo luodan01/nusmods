@@ -38,7 +38,7 @@ const defaultSettingsState: SettingsState = {
   hiddenInTimetable: [],
   modRegNotification: defaultModRegNotificationState,
   moduleTableOrder: 'exam',
-  beta: false,
+  beta: true, //@EDITED: changed from false to true
   loadDisqusManually: false,
 };
 

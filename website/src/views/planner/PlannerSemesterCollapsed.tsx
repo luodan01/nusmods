@@ -14,9 +14,9 @@ import {
   getTotalMC,
 } from 'utils/planner';
 import PlannerModule from './PlannerModule';
-
+import PlannerModuleCollapsed from  './PlannerModuleCollapsed';
 import AddModule from './AddModule';
-import styles from './PlannerSemester.scss';
+import styles from './PlannerSemesterCollapsed.scss';
 import PlannerContainer from './PlannerContainer/PlannerContainer';
 
 type Props = {
@@ -34,6 +34,9 @@ type Props = {
   setPlaceholderModule: (id: string, moduleCode: ModuleCode) => void;
 };
 
+type State = {
+  readonly showModuleDetails: boolean;
+};
 
 function renderSemesterMeta(plannerModules: PlannerModuleInfo[]) {
   const moduleCredits = getTotalMC(plannerModules);
@@ -51,7 +54,7 @@ function renderSemesterMeta(plannerModules: PlannerModuleInfo[]) {
 /**
  * Component for a single column of modules for a single semester
  */
-const PlannerSemester: React.FC<Props> = ({
+const PlannerSemesterCollapsed: React.FC<Props> = ({
   year,
   semester,
   modules,
@@ -69,7 +72,7 @@ const PlannerSemester: React.FC<Props> = ({
     const showExamDate = showModuleDetails && config.academicYear === year;
 
     return (
-        <PlannerModule
+     <PlannerModuleCollapsed
         key={id}
         id={id}
         index={index}
@@ -83,7 +86,7 @@ const PlannerSemester: React.FC<Props> = ({
         removeModule={removeModule}
         addCustomData={addCustomData}
         setPlaceholderModule={setPlaceholderModule}
-      /> 
+        />
     );
   };
 
@@ -125,4 +128,4 @@ const PlannerSemester: React.FC<Props> = ({
   );
 };
 
-export default React.memo(PlannerSemester);
+export default React.memo(PlannerSemesterCollapsed);

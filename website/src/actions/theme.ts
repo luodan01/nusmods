@@ -29,3 +29,21 @@ export function toggleTitleDisplay() {
     payload: null,
   };
 }
+
+//@EDITED added this
+export const TOGGLE_MODULE_DETAILS = 'TOGGLE_MODULE_DETAILS' as const;
+export function toggleModuleDetails() {
+  return {
+    type: TOGGLE_MODULE_DETAILS,
+    payload: null,
+  };
+}
+
+//@EDITED added this
+export const TOGGLE_YEARS_SHOWN = 'TOGGLE_YEARS_SHOWN' as const;
+export function toggleYearsShown() {
+  return {
+    type: TOGGLE_YEARS_SHOWN,
+    payload: null,
+  };
+}

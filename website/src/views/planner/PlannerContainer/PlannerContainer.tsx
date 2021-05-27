@@ -1,8 +1,10 @@
+import { useMemo, useRef, useState } from 'react';
 import { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { flatMap, flatten, sortBy, toPairs, values } from 'lodash';
 import { DragDropContext, Droppable, OnDragEndResponder } from 'react-beautiful-dnd';
 import classnames from 'classnames';
+import { Calendar, Grid, Sidebar, Type, Repeat } from 'react-feather';
 
 import { Module, ModuleCode, Semester } from 'types/modules';
 import { PlannerModulesWithInfo, PlannerModuleInfo, AddModuleData } from 'types/planner';
@@ -32,10 +34,13 @@ import Modal from 'views/components/Modal';
 import { State as StoreState } from 'types/state';
 import PlannerSemester from '../PlannerSemester';
 import PlannerYear from '../PlannerYear';
+import PlannerYearCollapsed from '../PlannerYearCollapsed';
 import PlannerSettings from '../PlannerSettings';
+import PlannerActions from '../PlannerActions';
 import CustomModuleForm from '../CustomModuleForm';
 
 import styles from './PlannerContainer.scss';
+import { findExamClashes } from 'utils/timetables';
 
 export type Props = Readonly<{
   modules: PlannerModulesWithInfo;
@@ -44,15 +49,19 @@ export type Props = Readonly<{
   iblocsModules: PlannerModuleInfo[];
   iblocs: boolean;
 
+
   // Actions
   fetchModule: (moduleCode: ModuleCode) => Promise<Module>;
   toggleFeedback: () => void;
+  toggleModuleDetails: () => void;
+  toggleYears: () => void;
 
   addModule: (year: string, semester: Semester, module: AddModuleData) => void;
   moveModule: (id: string, year: string, semester: Semester, index: number) => void;
   removeModule: (id: string) => void;
   setPlaceholderModule: (id: string, moduleCode: ModuleCode) => void;
 }>;
+
 
 type SemesterModules = { [semester: string]: PlannerModuleInfo[] };
 
@@ -61,15 +70,20 @@ type State = {
   readonly showSettings: boolean;
   // Module code is the module being edited. null means the modal is not open
   readonly showCustomModule: ModuleCode | null;
+  showModuleDetails: boolean;
+  showAllYears: boolean;
 };
 
 const TRASH_ID = 'trash';
 
-export class PlannerContainerComponent extends PureComponent<Props, State> {
+
+class PlannerContainerComponent extends PureComponent<Props, State> {
   state: State = {
     loading: true,
     showSettings: false,
     showCustomModule: null,
+    showModuleDetails: false,
+    showAllYears: false
   };
 
   componentDidMount() {
@@ -121,6 +135,12 @@ export class PlannerContainerComponent extends PureComponent<Props, State> {
     }
   };
 
+  onToggleModuleDetails  = () => 
+    this.setState({showModuleDetails: !this.state.showModuleDetails});
+
+  onToggleYearsShown  = () => 
+    this.setState({showAllYears: !this.state.showAllYears});
+
   onAddCustomData = (moduleCode: ModuleCode) =>
     this.setState({
       showCustomModule: moduleCode,
@@ -133,15 +153,34 @@ export class PlannerContainerComponent extends PureComponent<Props, State> {
 
   closeAddCustomData = () => this.setState({ showCustomModule: null });
 
+
   renderHeader() {
     const modules = [...this.props.iblocsModules, ...flatten(flatMap(this.props.modules, values))];
     const credits = getTotalMC(modules);
     const count = modules.length;
-
+  
     return (
       <header className={styles.header}>
         <h1>
-          Module Planner{' '}
+        Module Planner{' '}
+          <button
+            className="btn btn-outline-primary btn-svg"
+            type="button"
+            onClick={this.onToggleModuleDetails}
+          >
+             <Repeat className="svg svg-small" />
+            {this.state.showModuleDetails? 'Hide Module Details' : 'Show Module Details'}
+          </button>
+
+          <button
+            className="btn btn-outline-primary btn-svg"
+            type="button"
+            onClick={this.onToggleYearsShown}
+          >
+            <Repeat className="svg svg-small" />
+            {this.state.showAllYears? "View All Years" : "View By Year"}
+          </button>
+
           <button
             className="btn btn-sm btn-outline-success"
             type="button"
@@ -191,6 +230,7 @@ export class PlannerContainerComponent extends PureComponent<Props, State> {
     };
 
     return (
+      <div>
       <div className={styles.pageContainer}>
         <Title>Module Planner</Title>
 
@@ -205,21 +245,31 @@ export class PlannerContainerComponent extends PureComponent<Props, State> {
                   year={subtractAcadYear(sortedModules[0][0])}
                   semester={IBLOCS_SEMESTER}
                   modules={iblocsModules}
+                  showModuleDetails={this.state.showModuleDetails}
                   {...commonProps}
                 />
               </section>
             )}
 
             {sortedModules.map(([year, semesters], index) => (
-              <PlannerYear
+              this.state.showModuleDetails 
+              ? <PlannerYear
                 key={year}
                 name={`Year ${index + 1}`}
                 year={year}
-                semesters={semesters}
+                semesters={semesters} 
                 {...commonProps}
-              />
+              /> 
+              : 
+              <PlannerYearCollapsed
+              key={year}
+              name={`Year ${index + 1}`}
+              year={year}
+              semesters={semesters}
+              {...commonProps}
+              /> 
             ))}
-          </div>
+          </div> 
 
           <div className={styles.moduleLists}>
             <section>
@@ -228,38 +278,21 @@ export class PlannerContainerComponent extends PureComponent<Props, State> {
                 year={EXEMPTION_YEAR}
                 semester={EXEMPTION_SEMESTER}
                 modules={exemptions}
-                showModuleMeta={false}
+                showModuleDetails={this.state.showModuleDetails}
                 {...commonProps}
               />
             </section>
 
             <section>
-              <h2 className={styles.modListHeaders}>Plan to Take</h2>
+              <h1 className={styles.modListHeaders}>Plan to Take</h1>
               <PlannerSemester
                 year={PLAN_TO_TAKE_YEAR}
                 semester={PLAN_TO_TAKE_SEMESTER}
                 modules={planToTake}
+                showModuleDetails={this.state.showModuleDetails}
                 {...commonProps}
               />
             </section>
-
-            <Droppable droppableId={TRASH_ID}>
-              {(provided, snapshot) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  className={classnames(styles.trash, {
-                    [styles.dragOver]: snapshot.isDraggingOver,
-                  })}
-                >
-                  <div className={styles.trashMessage}>
-                    <Trash />
-                    <p>Drop modules here to remove them</p>
-                  </div>
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
           </div>
         </DragDropContext>
 
@@ -284,6 +317,7 @@ export class PlannerContainerComponent extends PureComponent<Props, State> {
           )}
         </Modal>
       </div>
+      </div> 
     );
   }
 }
