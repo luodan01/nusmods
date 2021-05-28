@@ -32,12 +32,12 @@ import Title from 'views/components/Title';
 import LoadingSpinner from 'views/components/LoadingSpinner';
 import Modal from 'views/components/Modal';
 import { State as StoreState } from 'types/state';
-import PlannerSemester from '../PlannerSemester';
-import PlannerYear from '../PlannerYear';
-import PlannerYearCollapsed from '../PlannerYearCollapsed';
-import PlannerSettings from '../PlannerSettings';
+import PlannerSemester from '../PlannerSemester/PlannerSemester';
+import PlannerYear from '../PlannerYear/PlannerYear';
+import PlannerYearCollapsed from '../PlannerYear/PlannerYearCollapsed';
+import PlannerSettings from '../PlannerSettings/PlannerSettings';
 import PlannerActions from '../PlannerActions';
-import CustomModuleForm from '../CustomModuleForm';
+import CustomModuleForm from '../CustomModuleForm/CustomModuleForm';
 
 import styles from './PlannerContainer.scss';
 import { findExamClashes } from 'utils/timetables';
@@ -162,7 +162,7 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
     return (
       <header className={styles.header}>
         <h1>
-        Module Planner{' '}
+        Module Planner{' '} 
           <button
             className="btn btn-outline-primary btn-svg"
             type="button"
