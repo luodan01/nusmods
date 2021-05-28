@@ -3,7 +3,7 @@ import Downshift from 'downshift';
 import classnames from 'classnames';
 
 import { ChevronDown } from 'react-feather';
-import styles from './PlannerModule.scss';
+import styles from './PlannerModule/PlannerModule.scss'
 
 type Props = {
   readonly removeModule: () => void;
@@ -18,12 +18,13 @@ type MenuItem = {
 
 const ModuleMenu = memo((props: Props) => {
   const menuItems: MenuItem[] = [
-    { label: 'Edit MC and Title', action: props.editCustomData },
+    { label: 'Edit Info', action: props.editCustomData},
     { label: 'Remove', action: props.removeModule, className: 'dropdown-item-danger' },
   ];
 
   return (
-    <Downshift
+    <div className={styles.menuBtn}>
+    <Downshift 
       onSelect={(item) => {
         menuItems.forEach(({ label, action }) => {
           if (item === label) {
@@ -31,7 +32,7 @@ const ModuleMenu = memo((props: Props) => {
           }
         });
       }}
-    >
+    > 
       {({ getItemProps, getMenuProps, highlightedIndex, isOpen, toggleMenu }) => (
         <div className={styles.menuBtn}>
           <button
@@ -64,6 +65,7 @@ const ModuleMenu = memo((props: Props) => {
         </div>
       )}
     </Downshift>
+    </div>
   );
 });
 

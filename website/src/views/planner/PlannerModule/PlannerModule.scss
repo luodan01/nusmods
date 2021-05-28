@@ -1,9 +1,6 @@
 @import '~styles/utils/modules-entry';
-@import 'variables';
+@import '../variables';
 
-.moduleName {
-    color: inherit;
-}
 .module {
   padding: $module-padding-v $module-padding-h;
   margin-bottom: 0.4rem;
@@ -49,7 +46,7 @@
 
 .menuBtn {
   position: relative;
-  z-index: 1;
+  z-index: 10000000000000;
   float: right;
   margin: -0.3rem -0.3rem 0 0;
 
@@ -72,11 +69,10 @@
 }
 
 .moduleName {
-  //margin-bottom: 0.4rem;
+  margin-bottom: 0.4rem;
 
   a {
     color: inherit;
-    font-size: 0.9rem;
 
     &:hover {
       text-decoration: underline;
@@ -110,7 +106,6 @@
   }
 
   svg {
-    transform: scale(0.3);
     width: 1rem;
   }
 }
