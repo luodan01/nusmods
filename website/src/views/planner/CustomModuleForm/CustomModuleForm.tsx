@@ -94,6 +94,10 @@ export const CustomModuleFormComponent: React.FC<Props> = (props) => {
             defaultValue={title || ''}
           />
         </div>
+          <label htmlFor="input-grade">Grade (optional)</label>
+          <select> 
+            <option value="">Select category</option>
+          </select>
       </div>
 
       <div className={styles.formAction}>

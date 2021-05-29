@@ -169,7 +169,7 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
             onClick={this.onToggleModuleDetails}
           >
              <Repeat className="svg svg-small" />
-            {this.state.showModuleDetails? 'Hide Module Details' : 'Show Module Details'}
+            {this.state.showModuleDetails? 'Hide Details' : 'Show Details'}
           </button>
 
           <button
