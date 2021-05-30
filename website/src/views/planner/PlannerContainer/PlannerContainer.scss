@@ -58,14 +58,13 @@
   @include scrollable;
 }
 
-// .yearWrapperCollapsed {
-//   display: flex;
-//   height: 100%;
-//   margin: 1rem 0 2rem;
-//   background: #339999;
+.yearWrapperCollapsed {
+  display: flex;
+  height: 100%;
+  margin: 1rem 0 2rem;
 
-//   @include scrollable;
-// }
+  @include scrollable;
+}
 
 .moduleLists {
   display: flex;
