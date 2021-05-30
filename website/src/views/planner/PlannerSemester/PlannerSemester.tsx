@@ -9,9 +9,11 @@ import { getExamDate, renderMCs } from 'utils/modules';
 import {
   getDroppableId,
   getModuleCredit,
+  getModuleGrade,
   getModuleTitle,
   getSemesterName,
   getTotalMC,
+  getSAP
 } from 'utils/planner';
 import PlannerModule from '../PlannerModule/PlannerModule';
 
@@ -37,13 +39,16 @@ type Props = {
 
 function renderSemesterMeta(plannerModules: PlannerModuleInfo[]) {
   const moduleCredits = getTotalMC(plannerModules);
+  const SAP = getSAP(plannerModules);
 
   return (
+    <div>
     <div className={styles.semesterMeta}>
       <p>
         {plannerModules.length} {plannerModules.length === 1 ? 'module' : 'modules'}
       </p>
-      <p>{renderMCs(moduleCredits)}</p>
+      <p>SAP: {Number.isNaN(SAP) ? '-' :SAP.toFixed(2)}</p>
+    </div>
     </div>
   );
 }
@@ -78,6 +83,7 @@ const PlannerSemester: React.FC<Props> = ({
         moduleTitle={showModuleDetails ? getModuleTitle(plannerModule) : null}
         examDate={showExamDate && moduleInfo ? getExamDate(moduleInfo, semester) : null}
         moduleCredit={showModuleDetails ? getModuleCredit(plannerModule) : null}
+        moduleGrade={showModuleDetails ? getModuleGrade(plannerModule) : null}
         conflict={conflict}
         semester={semester}
         removeModule={removeModule}

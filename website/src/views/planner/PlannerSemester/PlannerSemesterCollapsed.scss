@@ -5,10 +5,10 @@ $empty-message-height: 3rem;
 
 .semester {
   position: relative;
-  width: 7rem;//$semester-width;
+  width: $semester-width-collapsed;
   // Prevents the semester from collapsing at the start since all children are
   // absolute positioned
-  min-height: 24rem;
+  min-height: 18rem;
   margin: 0 $column-gutter 2rem 0;
 
   &.emptyList .addModule {

@@ -14,6 +14,7 @@ import {
   EXEMPTION_YEAR,
   fromDroppableId,
   getTotalMC,
+  getSAP,
   IBLOCS_SEMESTER,
   PLAN_TO_TAKE_SEMESTER,
   PLAN_TO_TAKE_YEAR,
@@ -48,6 +49,7 @@ export type Props = Readonly<{
   planToTake: PlannerModuleInfo[];
   iblocsModules: PlannerModuleInfo[];
   iblocs: boolean;
+  exempt: boolean;
 
 
   // Actions
@@ -82,8 +84,8 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
     loading: true,
     showSettings: false,
     showCustomModule: null,
-    showModuleDetails: false,
-    showAllYears: false
+    showModuleDetails: true,
+    showAllYears: true
   };
 
   componentDidMount() {
@@ -157,6 +159,7 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
   renderHeader() {
     const modules = [...this.props.iblocsModules, ...flatten(flatMap(this.props.modules, values))];
     const credits = getTotalMC(modules);
+    const CAP = getSAP(modules);
     const count = modules.length;
   
     return (
@@ -192,7 +195,10 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
 
         <div className={styles.headerRight}>
           <p className={styles.moduleStats}>
-            {count} {count === 1 ? 'module' : 'modules'} / {renderMCs(credits)}
+            {count} {count === 1 ? 'module' : 'modules'} / {renderMCs(credits)} 
+          </p>
+          <p className={styles.moduleStats}>
+            CAP: {Number.isNaN(CAP) ? '-' :CAP.toFixed(2)}
           </p>
 
           <button
@@ -214,7 +220,7 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
       return <LoadingSpinner />;
     }
 
-    const { modules, exemptions, planToTake, iblocs, iblocsModules } = this.props;
+    const { modules, exemptions, planToTake, iblocs, exempt, iblocsModules } = this.props;
 
     // Sort acad years since acad years may not be inserted in display order
     const sortedModules: [string, SemesterModules][] = sortBy(
@@ -237,7 +243,7 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
         {this.renderHeader()}
 
         <DragDropContext onDragEnd={this.onDropEnd}>
-          <div className={styles.yearWrapper}>
+          <div className={this.state.showModuleDetails ? styles.yearWrapper : styles.yearWrapperCollapsed}>
             {iblocs && (
               <section>
                 <h2 className={styles.modListHeaders}>iBLOCs</h2>
@@ -272,16 +278,18 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
           </div> 
 
           <div className={styles.moduleLists}>
-            <section>
-              <h2 className={styles.modListHeaders}>Exemptions</h2>
-              <PlannerSemester
-                year={EXEMPTION_YEAR}
-                semester={EXEMPTION_SEMESTER}
-                modules={exemptions}
-                showModuleDetails={this.state.showModuleDetails}
-                {...commonProps}
-              />
-            </section>
+          { exempt && (
+              <section>
+                <h2 className={styles.modListHeaders}>Exemptions</h2>
+                <PlannerSemester
+                  year={EXEMPTION_YEAR}
+                  semester={EXEMPTION_SEMESTER}
+                  modules={exemptions}
+                  showModuleDetails={this.state.showModuleDetails}
+                  {...commonProps}
+                />
+              </section>
+            )}
 
             <section>
               <h1 className={styles.modListHeaders}>Plan to Take</h1>
@@ -324,6 +332,7 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
 
 const mapStateToProps = (state: StoreState) => ({
   iblocs: state.planner.iblocs,
+  exempt: state.planner.exempt,
 
   modules: getAcadYearModules(state),
   exemptions: getExemptions(state),

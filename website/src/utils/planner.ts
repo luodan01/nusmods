@@ -125,6 +125,32 @@ export function getModuleCredit(
   return null;
 }
 
+export function getModuleGrade(
+  module: Pick<PlannerModuleInfo, 'customInfo'>,
+): string | null {
+  const {customInfo} = module;
+  return customInfo?.moduleGrade == undefined ? null : customInfo.moduleGrade;
+}
+
+export function getModuleGradePointWeight(
+  module: Pick<PlannerModuleInfo, 'customInfo'>,
+): number | null {
+  const grade = getModuleGrade(module);
+  const mc = getModuleCredit(module);
+  const numberGrade = grade == 'A+' || grade == 'A' ? 5.0
+        : grade == 'A-' ? 4.5
+        : grade == 'B+' ? 4.0
+        : grade == 'B' ? 3.5
+        : grade == 'B-' ? 3.0
+        : grade == 'C+' ? 2.5
+        : grade == 'C' ? 2.0
+        : grade == 'D+' ? 1.5
+        : grade == 'D' ? 1.0
+        : grade == "F" ? 0.0 
+        : null;
+  return (numberGrade == null || mc == null) ? null : numberGrade * mc;
+}
+
 /**
  * Get total module credits for the given array of planner modules
  */
@@ -134,3 +160,16 @@ export function getTotalMC(
   // Remove nulls using .filter(Boolean)
   return sum(modules.map(getModuleCredit).filter(Boolean));
 }
+
+export function getTotalGradedMC(
+  modules: Pick<PlannerModuleInfo, 'moduleInfo' | 'customInfo'>[],
+): number {
+  return getTotalMC(modules.filter(mod => getModuleGradePointWeight(mod) !== null));
+}
+
+export function getSAP(
+  modules: Pick<PlannerModuleInfo, 'customInfo'>[],
+): number {
+  return sum(modules.map(getModuleGradePointWeight)) / getTotalGradedMC(modules);
+}
+

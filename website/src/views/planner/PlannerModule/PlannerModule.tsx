@@ -7,7 +7,7 @@ import classnames from 'classnames';
 import { ModuleCode, ModuleTitle, Semester } from 'types/modules';
 import { Conflict, PlannerPlaceholder } from 'types/planner';
 import config from 'config';
-import { renderMCs } from 'utils/modules';
+import { renderMCs} from 'utils/modules';
 import { conflictToText } from 'utils/planner';
 import { toSingaporeTime } from 'utils/timify';
 import { AlertTriangle, ChevronDown } from 'react-feather';
@@ -22,6 +22,7 @@ type Props = Readonly<{
   // Module information
   moduleTitle: ModuleTitle | null;
   moduleCredit: number | null;
+  moduleGrade: string | null;
   examDate: string | null;
   moduleCode?: ModuleCode;
   placeholder?: PlannerPlaceholder;
@@ -110,13 +111,16 @@ const PlannerModule = memo<Props>((props) => {
   };
 
   const renderMeta = () => {
-    const { moduleCredit, examDate } = props;
-    if (!moduleCredit && !examDate) return null;
+    const { moduleCredit, examDate, moduleGrade } = props;
+    if (!moduleCredit && !examDate && !moduleGrade) return null;
 
     return (
+      <div>
       <div className={styles.moduleMeta}>
         {moduleCredit && <div>{renderMCs(moduleCredit)}</div>}
         {examDate && <div>{format(toSingaporeTime(examDate), 'MMM d, h:mm a')}</div>}
+      </div>
+      <div className={styles.moduleMeta}> {moduleGrade && <div>Grade: {moduleGrade}</div>}</div>
       </div>
     );
   };

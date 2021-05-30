@@ -9,9 +9,11 @@ import { getExamDate, renderMCs } from 'utils/modules';
 import {
   getDroppableId,
   getModuleCredit,
+  getModuleGrade,
   getModuleTitle,
   getSemesterName,
   getTotalMC,
+  getSAP
 } from 'utils/planner';
 import PlannerModule from '../PlannerModule/PlannerModule';
 import PlannerModuleCollapsed from  '../PlannerModule/PlannerModuleCollapsed';
@@ -40,13 +42,16 @@ type State = {
 
 function renderSemesterMeta(plannerModules: PlannerModuleInfo[]) {
   const moduleCredits = getTotalMC(plannerModules);
+  const SAP = getSAP(plannerModules);
 
   return (
+    <div>
     <div className={styles.semesterMeta}>
       <p>
         {plannerModules.length} {plannerModules.length === 1 ? 'module' : 'modules'}
       </p>
-      <p>{renderMCs(moduleCredits)}</p>
+    </div>
+    <div className={styles.semesterMeta}><p>SAP: {Number.isNaN(SAP) ? '-' :SAP.toFixed(2)}</p></div>
     </div>
   );
 }

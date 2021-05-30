@@ -150,6 +150,7 @@ export type CustomModule = {
   // key in the name and MCs manually
   readonly title?: string | null;
   readonly moduleCredit: number;
+  readonly moduleGrade?: string | null;
 };
 
 export type CustomModuleData = {
@@ -161,6 +162,7 @@ export type PlannerState = Readonly<{
   minYear: string;
   maxYear: string;
   iblocs: boolean;
+  exempt: boolean;
 
   modules: { [id: string]: PlannerTime };
   custom: CustomModuleData;

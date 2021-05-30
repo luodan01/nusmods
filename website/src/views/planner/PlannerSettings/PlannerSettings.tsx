@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import config from 'config';
 import { getYearsBetween, offsetAcadYear } from 'utils/modules';
 import { acadYearLabel } from 'utils/planner';
-import { setPlannerIBLOCs, setPlannerMaxYear, setPlannerMinYear } from 'actions/planner';
+import { setPlannerIBLOCs, setPlannerMaxYear, setPlannerMinYear, setPlannerExemptions } from 'actions/planner';
 import ExternalLink from 'views/components/ExternalLink';
 import Toggle from 'views/components/Toggle';
 import { State } from 'types/state';
@@ -15,11 +15,13 @@ type Props = {
   readonly minYear: string;
   readonly maxYear: string;
   readonly iblocs: boolean;
+  readonly exempt: boolean;
 
   // Actions
   readonly setMinYear: (str: string) => void;
   readonly setMaxYear: (str: string) => void;
   readonly setIBLOCs: (boolean: boolean) => void;
+  readonly setPlannerExemptions: (boolean: boolean) => void;
 };
 
 const MIN_YEARS = -5; // Studying year 6
@@ -121,6 +123,25 @@ export const PlannerSettingsComponent: React.FC<Props> = (props) => {
           onChange={(checked) => props.setIBLOCs(checked)}
         />
       </section>
+
+      <section className={styles.toggleSection}>
+        <div>
+          <h2 className={styles.label}>Exemptions</h2>
+
+          <p>
+            Polytechnic diploma holders admitted to a 3 or 4-year programme may be granted 
+            <ExternalLink href="https://www.nus.edu.sg/oam/apply-to-nus/polytechnic-diploma-from-singapore/module-exemptions
+"> advanced placement credits (APC)</ExternalLink> is a
+            in relevant modules for up to a maximum of 40 MCs.
+          </p>
+        </div>
+
+        <Toggle
+          labels={TOGGLE_LABELS}
+          isOn={props.exempt}
+          onChange={(checked) => props.setPlannerExemptions(checked)}
+        />
+      </section>
     </div>
   );
 };
@@ -130,11 +151,13 @@ const PlannerSettings = connect(
     minYear: state.planner.minYear,
     maxYear: state.planner.maxYear,
     iblocs: state.planner.iblocs,
+    exempt: state.planner.exempt,
   }),
   {
     setMaxYear: setPlannerMaxYear,
     setMinYear: setPlannerMinYear,
     setIBLOCs: setPlannerIBLOCs,
+    setPlannerExemptions: setPlannerExemptions,
   },
 )(PlannerSettingsComponent);
 

@@ -5,7 +5,7 @@ import { flatMap, size, sortBy, toPairs, values } from 'lodash';
 import { ModuleCode, Semester } from 'types/modules';
 import { AddModuleData, PlannerModuleInfo } from 'types/planner';
 import config from 'config';
-import { getSemesterName, getTotalMC } from 'utils/planner';
+import { getSemesterName, getTotalMC, getSAP } from 'utils/planner';
 import { Minus, Plus } from 'react-feather';
 import { renderMCs } from 'utils/modules';
 import PlannerSemesterCollapsed from '../PlannerSemester/PlannerSemesterCollapsed';
@@ -49,6 +49,7 @@ export default class PlannerYearCollapsed extends PureComponent<Props, State> {
     const { year, name, semesters } = this.props;
     const modules = flatMap(semesters, values);
     const credits = getTotalMC(modules);
+    const CAP = getSAP(modules);
     const count = modules.length;
 
     return (
@@ -58,9 +59,9 @@ export default class PlannerYearCollapsed extends PureComponent<Props, State> {
         </h2>
         <div className={styles.yearMeta}>
           <p>
-            {count} {count === 1 ? 'module' : 'modules'}
+            {count} {count === 1 ? 'module' : 'modules'} / {renderMCs(credits)}
           </p>
-          <p>{renderMCs(credits)}</p>
+          <p>CAP: {Number.isNaN(CAP) ? '-' :CAP.toFixed(2)}</p>
         </div>
       </header>
     );

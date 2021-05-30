@@ -7,8 +7,9 @@ import { State as StoreState } from 'types/state';
 
 import Tooltip from 'views/components/Tooltip/Tooltip';
 import { addCustomModule } from 'actions/planner';
-import { getModuleCredit, getModuleTitle } from 'utils/planner';
+import { getModuleCredit, getModuleTitle, getModuleGrade } from 'utils/planner';
 import styles from './CustomModuleForm.scss';
+import { values } from 'lodash';
 
 type OwnProps = Readonly<{
   moduleCode: ModuleCode;
@@ -27,6 +28,7 @@ export const CustomModuleFormComponent: React.FC<Props> = (props) => {
   // module title and MCs live
   const inputModuleCredit = React.createRef<HTMLInputElement>();
   const inputTitle = React.createRef<HTMLInputElement>();
+  const inputModuleGrade = React.createRef<HTMLSelectElement>();
 
   const onSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -35,6 +37,8 @@ export const CustomModuleFormComponent: React.FC<Props> = (props) => {
     const moduleCredit = inputModuleCreditCurrent && inputModuleCreditCurrent.value;
     const inputTitleCurrent = inputTitle.current;
     const title = inputTitleCurrent && inputTitleCurrent.value;
+    const inputModuleGradeCurrent = inputModuleGrade.current;
+    const moduleGrade = inputModuleCreditCurrent && inputModuleGradeCurrent?.value;
 
     // Module credit is required
     if (moduleCredit == null) return;
@@ -42,6 +46,7 @@ export const CustomModuleFormComponent: React.FC<Props> = (props) => {
     props.addCustomModule(props.moduleCode, {
       moduleCredit: +moduleCredit,
       title,
+      moduleGrade
     });
 
     props.onFinishEditing();
@@ -60,6 +65,10 @@ export const CustomModuleFormComponent: React.FC<Props> = (props) => {
     if (inputTitle.current) {
       inputTitle.current.value = moduleInfo.title;
     }
+
+    if (inputModuleGrade.current) {
+      inputModuleGrade.current.value = "";
+    }
   };
 
   const { moduleCode, moduleInfo, customInfo } = props;
@@ -67,6 +76,23 @@ export const CustomModuleFormComponent: React.FC<Props> = (props) => {
   const plannerModule = { moduleCode, customInfo, moduleInfo };
   const moduleCredit = getModuleCredit(plannerModule);
   const title = getModuleTitle(plannerModule);
+  const moduleGrade = getModuleGrade(plannerModule);
+  const grades = ['CS', 'CU', 'A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'D+', 'F'];
+  // const grades = [
+  //   {letterGrade : "CS", numberGrade: null},
+  //   {letterGrade : "CU", numberGrade: null},
+  //   {letterGrade : "A+", numberGrade: 5.0},
+  //   {letterGrade : "A", numberGrade: 5.0},
+  //   {letterGrade : "A-", numberGrade: 4.5},
+  //   {letterGrade : "B+", numberGrade: 4.0},
+  //   {letterGrade : "B", numberGrade: 3.5},
+  //   {letterGrade : "B-", numberGrade: 3.0},
+  //   {letterGrade : "C+", numberGrade: 2.5},
+  //   {letterGrade : "C", numberGrade: 2.0},
+  //   {letterGrade : "D+", numberGrade: 1.5},
+  //   {letterGrade : "D", numberGrade: 1.0},
+  //   {letterGrade : "F", numberGrade: 0.0},
+  // ]
 
   return (
     <form onSubmit={onSubmit}>
@@ -84,7 +110,7 @@ export const CustomModuleFormComponent: React.FC<Props> = (props) => {
             required
           />
         </div>
-        <div className="col-md-9">
+        <div>
           <label htmlFor="input-title">Title (optional)</label>
           <input
             ref={inputTitle}
@@ -94,10 +120,16 @@ export const CustomModuleFormComponent: React.FC<Props> = (props) => {
             defaultValue={title || ''}
           />
         </div>
+        <div className = "col-md-3">
           <label htmlFor="input-grade">Grade (optional)</label>
-          <select> 
-            <option value="">Select category</option>
+          <select 
+          ref={inputModuleGrade}
+          id="input-grade"
+          className="form-control" 
+          defaultValue={moduleGrade || ""} >
+            {grades.map((grade, index) => <option key={index}>{grade}</option>)}
           </select>
+          </div>
       </div>
 
       <div className={styles.formAction}>
