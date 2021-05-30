@@ -51,7 +51,6 @@ export type Props = Readonly<{
   iblocs: boolean;
   exempt: boolean;
 
-
   // Actions
   fetchModule: (moduleCode: ModuleCode) => Promise<Module>;
   toggleFeedback: () => void;
