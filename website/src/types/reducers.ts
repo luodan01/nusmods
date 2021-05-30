@@ -161,6 +161,7 @@ export type PlannerState = Readonly<{
   minYear: string;
   maxYear: string;
   iblocs: boolean;
+  exempt: boolean;
 
   modules: { [id: string]: PlannerTime };
   custom: CustomModuleData;

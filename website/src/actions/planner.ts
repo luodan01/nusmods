@@ -26,6 +26,14 @@ export function setPlannerIBLOCs(iblocs: boolean) {
   };
 }
 
+export const SET_PLANNER_EXEMPTIONS = 'SET_PLANNER_EXEMPTIONS' as const;
+export function setPlannerExemptions(exempt: boolean) {
+  return {
+    type: SET_PLANNER_EXEMPTIONS,
+    payload: exempt,
+  };
+}
+
 export const ADD_PLANNER_MODULE = 'ADD_PLANNER_MODULE' as const;
 export function addPlannerModule(year: string, semester: Semester, module: AddModuleData) {
   return {

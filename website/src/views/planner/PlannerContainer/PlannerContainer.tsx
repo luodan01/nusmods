@@ -48,7 +48,7 @@ export type Props = Readonly<{
   planToTake: PlannerModuleInfo[];
   iblocsModules: PlannerModuleInfo[];
   iblocs: boolean;
-
+  exempt: boolean;
 
   // Actions
   fetchModule: (moduleCode: ModuleCode) => Promise<Module>;
@@ -214,7 +214,7 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
       return <LoadingSpinner />;
     }
 
-    const { modules, exemptions, planToTake, iblocs, iblocsModules } = this.props;
+    const { modules, exemptions, planToTake, iblocs, exempt, iblocsModules } = this.props;
 
     // Sort acad years since acad years may not be inserted in display order
     const sortedModules: [string, SemesterModules][] = sortBy(
@@ -272,16 +272,18 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
           </div> 
 
           <div className={styles.moduleLists}>
-            <section>
-              <h2 className={styles.modListHeaders}>Exemptions</h2>
-              <PlannerSemester
-                year={EXEMPTION_YEAR}
-                semester={EXEMPTION_SEMESTER}
-                modules={exemptions}
-                showModuleDetails={this.state.showModuleDetails}
-                {...commonProps}
-              />
-            </section>
+            { exempt && (
+              <section>
+                <h2 className={styles.modListHeaders}>Exemptions</h2>
+                <PlannerSemester
+                  year={EXEMPTION_YEAR}
+                  semester={EXEMPTION_SEMESTER}
+                  modules={exemptions}
+                  showModuleDetails={this.state.showModuleDetails}
+                  {...commonProps}
+                />
+              </section>
+            )}
 
             <section>
               <h1 className={styles.modListHeaders}>Plan to Take</h1>
@@ -324,6 +326,7 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
 
 const mapStateToProps = (state: StoreState) => ({
   iblocs: state.planner.iblocs,
+  exempt: state.planner.exempt,
 
   modules: getAcadYearModules(state),
   exemptions: getExemptions(state),
