@@ -77,7 +77,7 @@ export const CustomModuleFormComponent: React.FC<Props> = (props) => {
   const moduleCredit = getModuleCredit(plannerModule);
   const title = getModuleTitle(plannerModule);
   const moduleGrade = getModuleGrade(plannerModule);
-  const grades = ['CS', 'CU', 'A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'D+', 'F'];
+  const grades = ['CS', 'CU', 'A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'D+', 'D', 'F'];
   // const grades = [
   //   {letterGrade : "CS", numberGrade: null},
   //   {letterGrade : "CU", numberGrade: null},
