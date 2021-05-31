@@ -56,7 +56,6 @@ export default class PlannerYear extends PureComponent<Props, State> {
           <p>
             {count} {count === 1 ? 'module' : 'modules'} / {renderMCs(credits)}
           </p>
-          <p>CAP: {Number.isNaN(CAP) ? '-' :CAP.toFixed(2)}</p>
         </div>
       </header>
     );
