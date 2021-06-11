@@ -13,6 +13,9 @@ import {
 } from './modules';
 import { VenueList } from './venues';
 
+import { PlannerModuleInfo } from 'types/planner';
+import planToTake from 'views/planner/PlannerContainer';
+
 /* app.js */
 export type NotificationOptions = {
   // Amount of time in ms for the notification to be shown, not including opening
@@ -163,6 +166,7 @@ export type PlannerState = Readonly<{
   maxYear: string;
   iblocs: boolean;
   exempt: boolean;
+  plantotake: typeof planToTake;
 
   modules: { [id: string]: PlannerTime };
   custom: CustomModuleData;

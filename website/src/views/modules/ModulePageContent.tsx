@@ -23,6 +23,7 @@ import ModuleExamClash from 'views/components/module-info/ModuleExamClash';
 import ModuleWorkload from 'views/components/module-info/ModuleWorkload';
 import ModuleExamInfo from 'views/components/module-info/ModuleExamInfo';
 import AddModuleDropdown from 'views/components/module-info/AddModuleDropdown';
+import AddModuleToPlanner from 'views/components/module-info/AddModuleToPlanner';
 import Announcements from 'views/components/notfications/Announcements';
 import Title from 'views/components/Title';
 import { Archive, Check } from 'react-feather';
@@ -206,6 +207,17 @@ const ModulePageContent: React.FC<Props> = ({ module, archiveYear }) => {
                 {!isArchive && offered && (
                   <div className={styles.addToTimetable}>
                     <AddModuleDropdown module={module} className="btn-group-sm" block />
+                  </div>
+                )}
+
+                {!isArchive && offered && (
+                  <div className={styles.addToTimetable}>
+                    <AddModuleToPlanner 
+                      module={module} 
+                      moduleData={
+                        { type: 'module',
+                          moduleCode: module.moduleCode }} 
+                      className="btn-group-sm" block />
                   </div>
                 )}
 

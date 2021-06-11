@@ -25,8 +25,8 @@ const defaultPlannerState: PlannerState = {
   maxYear: config.academicYear,
   iblocs: false,
   exempt: false,
+  plantotake: [],
   
-
   modules: {},
   custom: {},
 };
