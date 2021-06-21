@@ -17,6 +17,7 @@ import { modulePage } from 'views/routes/paths';
 import ModuleMenu from '../ModuleMenu';
 import PlannerModuleSelect from '../PlannerModuleSelect/PlannerModuleSelect';
 import styles from './PlannerModule.scss';
+import { BackgroundColor } from 'chalk';
 
 type Props = Readonly<{
   // Module information
@@ -28,6 +29,7 @@ type Props = Readonly<{
   placeholder?: PlannerPlaceholder;
   conflict?: Conflict | null;
   semester?: Semester;
+  colour: string;
 
   // For draggable
   id: string;
@@ -126,7 +128,7 @@ const PlannerModule = memo<Props>((props) => {
   };
 
   const renderPlaceholderForm = () => {
-    const { placeholder, moduleCode, moduleTitle, semester } = props;
+    const { placeholder, moduleCode, moduleTitle, semester, colour } = props;
 
     if (!placeholder) return null;
 
@@ -171,22 +173,24 @@ const PlannerModule = memo<Props>((props) => {
     );
   };
 
-  const { id, placeholder, moduleCode, moduleTitle, index, conflict } = props;
+  const { id, placeholder, moduleCode, moduleTitle, index, conflict, colour } = props;
 
   return (
     <Draggable key={moduleCode} draggableId={id} index={index}>
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
+          style={{backgroundColor: '#1f1e33'}}
           className={classnames(styles.module, {
+            [styles.colourCoded]: colour,
             [styles.warning]: conflict,
             [styles.isDragging]: snapshot.isDragging,
             [styles.placeholder]: placeholder && !moduleCode,
           })}
-          {...provided.draggableProps}
+          //{...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <ModuleMenu removeModule={removeModule} editCustomData={editCustomData} />
+          <ModuleMenu removeModule={removeModule} editCustomData={editCustomData}/>
 
           <div className={styles.moduleInfo}>
             <div className={styles.moduleName}>
