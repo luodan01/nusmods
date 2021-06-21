@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { TwitterPicker } from 'react-color';
 
 import { CustomModule } from 'types/reducers';
 import { Module, ModuleCode } from 'types/modules';
@@ -130,6 +131,9 @@ export const CustomModuleFormComponent: React.FC<Props> = (props) => {
             {grades.map((grade, index) => <option key={index}>{grade}</option>)}
           </select>
           </div>
+
+          <div className =  {styles.colourPicker}> <TwitterPicker /> </div>
+          
       </div>
 
       <div className={styles.formAction}>

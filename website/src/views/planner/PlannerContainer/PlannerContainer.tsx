@@ -40,6 +40,7 @@ import PlannerSettings from '../PlannerSettings/PlannerSettings';
 import PlannerActions from '../PlannerActions';
 import CustomModuleForm from '../CustomModuleForm/CustomModuleForm';
 
+
 import styles from './PlannerContainer.scss';
 import { findExamClashes } from 'utils/timetables';
 

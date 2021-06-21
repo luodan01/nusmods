@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "classnames": "^2.3.1",
+    "react-color": "^2.19.3",
     "react-feather": "^2.0.9"
   }
 }
