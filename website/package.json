@@ -139,7 +139,6 @@
     "core-js": "3.8.2",
     "date-fns": "2.16.1",
     "downshift": "6.0.15",
-    "firebase": "^5.10.1" ,
     "global": "^4.4.0",
     "ical-generator": "https://github.com/nusmodifications/ical-generator.git#a2aa62ed",
     "immer": "8.0.1",
