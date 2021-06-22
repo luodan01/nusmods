@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import classnames from 'classnames';
 
-import { ModuleCode, ModuleTitle, Semester } from 'types/modules';
+import { ModuleCode, ModuleTitle, Semester} from 'types/modules';
 import { Conflict, PlannerPlaceholder } from 'types/planner';
 import config from 'config';
 import { renderMCs} from 'utils/modules';
@@ -113,8 +113,9 @@ const PlannerModule = memo<Props>((props) => {
   };
 
   const renderMeta = () => {
-    const { moduleCredit, examDate, moduleGrade } = props;
-    if (!moduleCredit && !examDate && !moduleGrade) return null;
+    const { moduleCredit, examDate, moduleGrade, colour } = props;
+    
+    if (!moduleCredit && !examDate && !moduleGrade && !colour) return null;
 
     return (
       <div>
@@ -180,9 +181,8 @@ const PlannerModule = memo<Props>((props) => {
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
-          style={{backgroundColor: '#1f1e33'}}
+          style={{backgroundColor: colour}}
           className={classnames(styles.module, {
-            [styles.colourCoded]: colour,
             [styles.warning]: conflict,
             [styles.isDragging]: snapshot.isDragging,
             [styles.placeholder]: placeholder && !moduleCode,
