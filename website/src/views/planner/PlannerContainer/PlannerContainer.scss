@@ -32,11 +32,16 @@
 
   .headerRight {
     display: flex;
+    justify-content: space-between;
     align-items: center;
+
+    button {
+      margin-left: 1rem;
+    }
   }
 
   .moduleStats {
-    margin-right: 1rem;
+    margin-left: 1rem;
   }
 }
 

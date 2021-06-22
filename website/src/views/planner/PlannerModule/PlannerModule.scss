@@ -9,7 +9,7 @@
   font-size: 0.9rem;
   line-height: 1.3;
   color: 	darken(theme-color('success'), 30);
-  background: #fff; //@EDITED changed from lighten(theme-color('success'), 3)
+  background: #fff; //@EDITED changed from lighten(theme-color('success'), 3);
 
   &.warning {
     border-color: darken(theme-color('warning'), 10);

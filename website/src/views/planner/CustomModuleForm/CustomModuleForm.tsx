@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import { connect } from 'react-redux';
 import { TwitterPicker } from 'react-color';
 
@@ -11,6 +12,8 @@ import { addCustomModule } from 'actions/planner';
 import { getModuleCredit, getModuleTitle, getModuleGrade } from 'utils/planner';
 import styles from './CustomModuleForm.scss';
 import { values } from 'lodash';
+import { getSemesterTimetableColors } from 'selectors/timetables';
+import { selectModuleColor } from 'actions/timetables';
 
 type OwnProps = Readonly<{
   moduleCode: ModuleCode;
@@ -94,8 +97,10 @@ export const CustomModuleFormComponent: React.FC<Props> = (props) => {
   //   {letterGrade : "D", numberGrade: 1.0},
   //   {letterGrade : "F", numberGrade: 0.0},
   // ]
+  const [colour, setColour] = useState('#fff');
 
   return (
+
     <form onSubmit={onSubmit}>
       <h3 className={styles.heading}>Edit info for {moduleCode}</h3>
 
@@ -132,7 +137,12 @@ export const CustomModuleFormComponent: React.FC<Props> = (props) => {
           </select>
           </div>
 
-          <div className =  {styles.colourPicker}> <TwitterPicker /> </div>
+          <div className = {styles.colourPicker}>
+            <label htmlFor="input-colour">Colour Code</label>
+          <div> <TwitterPicker 
+              colour = {colour}
+              onChange={updatedColour => setColour(updatedColour)}/> 
+              </div></div>
           
       </div>
 

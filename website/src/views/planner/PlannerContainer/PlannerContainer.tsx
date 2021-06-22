@@ -28,7 +28,7 @@ import {
 import { toggleFeedback } from 'actions/app';
 import { fetchModule } from 'actions/moduleBank';
 import { getAcadYearModules, getExemptions, getIBLOCs, getPlanToTake } from 'selectors/planner';
-import { Settings, Trash } from 'react-feather';
+import { Settings, Trash, User } from 'react-feather';
 import Title from 'views/components/Title';
 import LoadingSpinner from 'views/components/LoadingSpinner';
 import Modal from 'views/components/Modal';
@@ -200,15 +200,23 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
           <p className={styles.moduleStats}>
             CAP: {Number.isNaN(CAP) ? '-' :CAP.toFixed(2)}
           </p>
+          
+          <button
+            className="btn btn-svg btn-outline-primary"
+            type="button"
+            //onClick={() => this.setState({ showSettings: true })}
+          >
+            <User className="svg svg-small" /> Login
+          </button>
 
           <button
             className="btn btn-svg btn-outline-primary"
             type="button"
             onClick={() => this.setState({ showSettings: true })}
           >
-            <Settings className="svg" /> Settings
+            <Settings className="svg svg-small" /> Settings
           </button>
-        </div>
+      </div>
       </header>
     );
   }

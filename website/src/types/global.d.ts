@@ -33,6 +33,8 @@ declare module '*.scss' {
   export = content;
 }
 
+declare module 'react-color';
+
 declare module '*.svg' {
   // SVG files are loaded as React components
   type SVGProps = React.SVGAttributes<SVGElement> & {
