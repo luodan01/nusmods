@@ -265,7 +265,6 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
             type="button"
             onClick={async () => {
                 var provider = new firebase.auth.GoogleAuthProvider();
-                provider.setCustomParameters({ prompt: 'select_account' });
                 await auth.signInWithPopup(provider);
             }
             }
