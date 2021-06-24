@@ -21,6 +21,7 @@ import {
 } from 'utils/planner';
 import {
   addPlannerModule,
+    getAllPlanner,
   movePlannerModule,
   removePlannerModule,
   setPlaceholderModule,
@@ -40,6 +41,9 @@ import PlannerSettings from '../PlannerSettings/PlannerSettings';
 import PlannerActions from '../PlannerActions';
 import CustomModuleForm from '../CustomModuleForm/CustomModuleForm';
 
+import {auth, db} from "../../../firebaseConfig";
+import firebase from "firebase";
+
 
 import styles from './PlannerContainer.scss';
 import { findExamClashes } from 'utils/timetables';
@@ -58,7 +62,8 @@ export type Props = Readonly<{
   toggleModuleDetails: () => void;
   toggleYears: () => void;
 
-  addModule: (year: string, semester: Semester, module: AddModuleData) => void;
+    addModule: (year: string, semester: Semester, module: AddModuleData) => void;
+    getModules:(modules:any,customData:any)=>void,
   moveModule: (id: string, year: string, semester: Semester, index: number) => void;
   removeModule: (id: string) => void;
   setPlaceholderModule: (id: string, moduleCode: ModuleCode) => void;
@@ -73,7 +78,8 @@ type State = {
   // Module code is the module being edited. null means the modal is not open
   readonly showCustomModule: ModuleCode | null;
   showModuleDetails: boolean;
-  showAllYears: boolean;
+    showAllYears: boolean;
+    currUser:firebase.User|null;
 };
 
 const TRASH_ID = 'trash';
@@ -85,10 +91,13 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
     showSettings: false,
     showCustomModule: null,
     showModuleDetails: true,
-    showAllYears: true
+      showAllYears: true,
+      currUser:null
   };
 
   componentDidMount() {
+      console.log(this.props.modules);
+      console.log("HEY")
     // TODO: Handle error
     const modules = [
       ...flatten(flatMap(this.props.modules, values)),
@@ -104,7 +113,42 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
         }),
       ),
     ).then(() => this.setState({ loading: false }));
+
+
+  auth.onAuthStateChanged(() => {
+    console.log(`Current User: ${auth.currentUser}`);
+
+      if (auth.currentUser!==null){
+      db.collection("users").doc(auth.currentUser!.uid).collection("planner").get()
+          .then(collection =>{
+              const mods :any[]= []
+              collection.docs.forEach((doc)=>{
+                  mods.push(doc.data())
+              })
+
+              db.collection("users").doc(auth.currentUser!.uid).collection("custom").get()
+                  .then(custDatas=>{
+                      const customDataList :any[]=[];
+
+                      custDatas.forEach(custDataDoc=>{
+                          const id = custDataDoc.id
+                          customDataList.push({id,data:custDataDoc.data()})
+                      })
+
+                      console.log(this.getModules(mods,customDataList))
+                  })
+
+
+
+          });
+      }
+    this.setState({currUser:auth.currentUser});
+  });
   }
+
+    getModules=(mods:any,custData:any)=>{
+        this.props.getModules(mods,custData)
+    };
 
   onAddModule = (year: string, semester: Semester, module: AddModuleData) => {
     if (module.type === 'module') {
@@ -201,13 +245,34 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
             CAP: {Number.isNaN(CAP) ? '-' :CAP.toFixed(2)}
           </p>
           
+          {this.state.currUser !== null ?
+
+
           <button
             className="btn btn-svg btn-outline-primary"
             type="button"
-            //onClick={() => this.setState({ showSettings: true })}
+            onClick={async () => {
+                await auth.signOut()
+            }
+            }
+          >
+            <User className="svg svg-small" /> Logout
+        </button>
+
+              :
+          <button
+            className="btn btn-svg btn-outline-primary"
+            type="button"
+            onClick={async () => {
+                var provider = new firebase.auth.GoogleAuthProvider();
+                provider.setCustomParameters({ prompt: 'select_account' });
+                await auth.signInWithPopup(provider);
+            }
+            }
           >
             <User className="svg svg-small" /> Login
-          </button>
+        </button>
+        }
 
           <button
             className="btn btn-svg btn-outline-primary"
@@ -244,7 +309,7 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
     };
 
     return (
-      <div>
+      <div >
       <div className={styles.pageContainer}>
         <Title>Module Planner</Title>
 
@@ -353,7 +418,8 @@ const PlannerContainer = connect(mapStateToProps, {
   toggleFeedback,
   setPlaceholderModule,
   addModule: addPlannerModule,
-  moveModule: movePlannerModule,
+    moveModule: movePlannerModule,
+    getModules: getAllPlanner,
   removeModule: removePlannerModule,
 })(PlannerContainerComponent);
 

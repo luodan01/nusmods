@@ -16,9 +16,11 @@ import {
   SET_PLANNER_MAX_YEAR,
   SET_PLANNER_MIN_YEAR,
   SET_PLANNER_EXEMPTIONS,
+  GET_ALL_PLANNER,
 } from 'actions/planner';
 import { filterModuleForSemester } from 'selectors/planner';
 import config from 'config';
+import {auth, db} from 'firebaseConfig';
 
 const defaultPlannerState: PlannerState = {
   minYear: config.academicYear,
@@ -61,6 +63,24 @@ export default function planner(
   action: Actions,
 ): PlannerState {
   switch (action.type) {
+      case GET_ALL_PLANNER:
+          console.log(state)
+          console.log(action.payload)
+          return produce(state,(draft)=>{
+              console.log(draft.modules)
+
+              action.payload.da.forEach((element:any )=> {
+                  const {id} = element
+
+                  draft.modules[id] = element
+              });
+
+              action.payload.custData.forEach((element:any) =>{
+                  draft.custom[element.id] = element.data
+              });
+
+          })
+
     case SET_PLANNER_MIN_YEAR:
       return {
         ...state,
@@ -92,7 +112,24 @@ export default function planner(
           ? { placeholderId: payload.placeholderId }
           : { moduleCode: payload.moduleCode };
 
-      return produce(state, (draft) => {
+        // IMP stuff is here :)
+        console.log({id,year,semester,index})
+        console.log(auth.currentUser!.uid);
+
+
+
+
+      if (auth.currentUser!==null){
+        db.collection("users").doc(auth.currentUser!.uid).collection("planner").doc(
+            id
+        ).set(
+            {id,year,semester,index,...props}, {merge:true})
+            .then((e:any)=>{console.log("done")});
+      }
+
+      return produce(state,  (draft) => {
+
+
         draft.modules[id] = {
           id,
           year,
@@ -105,6 +142,9 @@ export default function planner(
 
     case MOVE_PLANNER_MODULE: {
       const { id, year, semester, index } = action.payload;
+        console.log({year,id,semester,index})
+
+
 
       // Insert the module into its new location and update the location of
       // all other modules on the list. We exclude the moved module because otherwise
@@ -136,11 +176,20 @@ export default function planner(
     }
 
     case REMOVE_PLANNER_MODULE:
+
+      if (auth.currentUser!==null){
+          db.collection("users").doc(auth.currentUser!.uid).collection("planner").doc(action.payload.id).delete()
+      }
+
       return produce(state, (draft) => {
         delete draft.modules[action.payload.id];
       });
 
     case ADD_CUSTOM_PLANNER_DATA:
+      if (auth.currentUser!==null){
+          db.collection("users").doc(auth.currentUser!.uid).collection("custom").doc(action.payload.moduleCode).set(action.payload.data,{merge:true})
+
+      }
       return produce(state, (draft) => {
         draft.custom[action.payload.moduleCode] = action.payload.data;
       });

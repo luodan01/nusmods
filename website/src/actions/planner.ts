@@ -36,6 +36,9 @@ export function setPlannerExemptions(exempt: boolean) {
 
 export const ADD_PLANNER_MODULE = 'ADD_PLANNER_MODULE' as const;
 export function addPlannerModule(year: string, semester: Semester, module: AddModuleData) {
+    console.log("Add")
+    console.log({year,semester,module});
+    
   return {
     type: ADD_PLANNER_MODULE,
     payload: {
@@ -48,6 +51,8 @@ export function addPlannerModule(year: string, semester: Semester, module: AddMo
 
 export const MOVE_PLANNER_MODULE = 'MOVE_PLANNER_MODULE' as const;
 export function movePlannerModule(id: string, year: string, semester: Semester, index: number) {
+
+    console.log("move")
   return {
     type: MOVE_PLANNER_MODULE,
     payload: {
@@ -61,6 +66,8 @@ export function movePlannerModule(id: string, year: string, semester: Semester, 
 
 export const REMOVE_PLANNER_MODULE = 'REMOVE_PLANNER_MODULE' as const;
 export function removePlannerModule(id: string) {
+
+    console.log("remove")
   return {
     type: REMOVE_PLANNER_MODULE,
     payload: {
@@ -71,6 +78,7 @@ export function removePlannerModule(id: string) {
 
 export const SET_PLACEHOLDER_MODULE = 'SET_PLACEHOLDER_MODULE' as const;
 export function setPlaceholderModule(id: string, moduleCode: ModuleCode) {
+    console.log("placeholder ?")
   return {
     type: SET_PLACEHOLDER_MODULE,
     payload: {
@@ -86,4 +94,12 @@ export function addCustomModule(moduleCode: ModuleCode, data: CustomModule) {
     type: ADD_CUSTOM_PLANNER_DATA,
     payload: { moduleCode, data },
   };
+}
+
+export const GET_ALL_PLANNER = "GET_ALL_PLANNER" as const;
+export function getAllPlanner(da:any,custData:any){
+    return{
+        type: GET_ALL_PLANNER,
+        payload:{da,custData}
+    }
 }
