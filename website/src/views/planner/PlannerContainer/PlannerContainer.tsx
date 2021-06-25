@@ -93,6 +93,34 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
       currUser:null
   };
 
+
+
+    updateModules = ()=>{
+      if (auth.currentUser!==null){
+      db.collection("users").doc(auth.currentUser!.uid).collection("planner").get()
+          .then(collection =>{
+              const mods :any[]= []
+              collection.docs.forEach((doc)=>{
+                  mods.push(doc.data())
+              })
+
+              db.collection("users").doc(auth.currentUser!.uid).collection("custom").get()
+                  .then(custDatas=>{
+                      const customDataList :any[]=[];
+
+                      custDatas.forEach(custDataDoc=>{
+                          const id = custDataDoc.id
+                          customDataList.push({id,data:custDataDoc.data()})
+                      })
+
+                      console.log(this.getModules(mods,customDataList))
+                  })
+
+
+
+          });
+      }}
+
   componentDidMount() {
       console.log(this.props.modules);
       console.log("HEY")
@@ -269,7 +297,8 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
             type="button"
             onClick={async () => {
                 var provider = new firebase.auth.GoogleAuthProvider();
-                provider.setCustomParameters({ prompt: 'select_account' });
+provider.setCustomParameters({ prompt: 'select_account' });
+
                 await auth.signInWithPopup(provider);
             }
             }
@@ -277,6 +306,17 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
             <User className="svg svg-small" /> Login
         </button>
         }
+
+          <button
+            className="btn btn-svg btn-outline-primary"
+            type="button"
+            onClick={() => {
+                this.resetModules(true,true)
+                this.updateModules()
+            }}
+          >
+             Reset
+          </button>
 
           <button
             className="btn btn-svg btn-outline-primary"

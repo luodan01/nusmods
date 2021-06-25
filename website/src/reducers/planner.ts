@@ -90,10 +90,10 @@ export default function planner(
         return produce(state,(draft)=>{
             if (action.payload.modules){
 
-                draft.modules.length = 0 
+                draft.modules = {}
             }
             if(action.payload.custom) {
-                draft.custom.length = 0
+                draft.custom = {}
             }
         });
 
@@ -207,7 +207,6 @@ export default function planner(
     case ADD_CUSTOM_PLANNER_DATA:
       if (auth.currentUser!==null){
           db.collection("users").doc(auth.currentUser!.uid).collection("custom").doc(action.payload.moduleCode).set(action.payload.data,{merge:true})
-
       }
       return produce(state, (draft) => {
         draft.custom[action.payload.moduleCode] = action.payload.data;
