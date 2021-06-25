@@ -1,0 +1,23 @@
+.color-muted {
+  border: 1px solid #ccc;
+}
+
+.hoverable {
+  transition: background-color $desktop-entering-duration $material-deceleration-curve;
+}
+
+@each $name, $colors in $nusmods-theme-colors {
+  .theme-#{$name},
+  // Specificity override for the theme settings page
+  .theme-option.theme-#{$name} {
+    $index: 0;
+
+    @each $color in $colors {
+      .color-#{$index} {
+        @include color($color);
+      }
+
+      $index: $index + 1; /* stylelint-disable-line order/order */
+    }
+  }
+}
