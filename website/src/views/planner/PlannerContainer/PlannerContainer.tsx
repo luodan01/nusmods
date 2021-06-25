@@ -1,13 +1,9 @@
 import { useMemo, useRef, useState } from 'react';
 import { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { flatMap, flatten, sortBy, toPairs, values } from 'lodash';
-import { DragDropContext, Droppable, OnDragEndResponder } from 'react-beautiful-dnd';
-import classnames from 'classnames';
-import { Calendar, Grid, Sidebar, Type, Repeat } from 'react-feather';
+import { flatMap, flatten, sortBy, toPairs, values } from 'lodash'; import { DragDropContext, Droppable, OnDragEndResponder } from 'react-beautiful-dnd'; import classnames from 'classnames'; import { Calendar, Grid, Sidebar, Type, Repeat } from 'react-feather';
 
-import { Module, ModuleCode, Semester } from 'types/modules';
-import { PlannerModulesWithInfo, PlannerModuleInfo, AddModuleData } from 'types/planner';
+import { Module, ModuleCode, Semester } from 'types/modules'; import { PlannerModulesWithInfo, PlannerModuleInfo, AddModuleData } from 'types/planner';
 import { MODULE_CODE_REGEX, renderMCs, subtractAcadYear } from 'utils/modules';
 import {
   EXEMPTION_SEMESTER,
@@ -22,6 +18,7 @@ import {
 import {
   addPlannerModule,
     getAllPlanner,
+    resetPlanner,
   movePlannerModule,
   removePlannerModule,
   setPlaceholderModule,
@@ -64,6 +61,7 @@ export type Props = Readonly<{
 
     addModule: (year: string, semester: Semester, module: AddModuleData) => void;
     getModules:(modules:any,customData:any)=>void,
+    resetPlanner:(modules:boolean,custom:boolean)=>void;
   moveModule: (id: string, year: string, semester: Semester, index: number) => void;
   removeModule: (id: string) => void;
   setPlaceholderModule: (id: string, moduleCode: ModuleCode) => void;
@@ -142,10 +140,16 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
 
           });
       }
+      else{
+          this.resetModules(true,true)
+      }
     this.setState({currUser:auth.currentUser});
   });
   }
 
+    resetModules=(modules:boolean,custom:boolean)=>{
+        this.props.resetPlanner(modules,custom)
+    }
     getModules=(mods:any,custData:any)=>{
         this.props.getModules(mods,custData)
     };
@@ -209,7 +213,7 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
     return (
       <header className={styles.header}>
         <h1>
-        Module Planner{' '} 
+            {auth.currentUser !== null ? `${auth.currentUser.displayName}'s ` : ""}Module Planner{' '} 
           <button
             className="btn btn-outline-primary btn-svg"
             type="button"
@@ -265,6 +269,7 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
             type="button"
             onClick={async () => {
                 var provider = new firebase.auth.GoogleAuthProvider();
+                provider.setCustomParameters({ prompt: 'select_account' });
                 await auth.signInWithPopup(provider);
             }
             }
@@ -416,10 +421,13 @@ const PlannerContainer = connect(mapStateToProps, {
   fetchModule,
   toggleFeedback,
   setPlaceholderModule,
-  addModule: addPlannerModule,
+    addModule: addPlannerModule,
+    resetPlanner: resetPlanner,
+
     moveModule: movePlannerModule,
     getModules: getAllPlanner,
-  removeModule: removePlannerModule,
+    removeModule: removePlannerModule,
+
 })(PlannerContainerComponent);
 
 export default PlannerContainer;

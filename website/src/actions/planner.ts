@@ -103,3 +103,11 @@ export function getAllPlanner(da:any,custData:any){
         payload:{da,custData}
     }
 }
+
+export const RESET_PLANNER = "RESET_PLANNER" as const
+export function resetPlanner(modules:boolean,custom:boolean){
+    return {
+        type:RESET_PLANNER,
+        payload:{modules,custom}
+    }
+}

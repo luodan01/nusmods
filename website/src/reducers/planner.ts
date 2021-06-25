@@ -17,6 +17,7 @@ import {
   SET_PLANNER_MIN_YEAR,
   SET_PLANNER_EXEMPTIONS,
   GET_ALL_PLANNER,
+  RESET_PLANNER,
 } from 'actions/planner';
 import { filterModuleForSemester } from 'selectors/planner';
 import config from 'config';
@@ -67,19 +68,35 @@ export default function planner(
           console.log(state)
           console.log(action.payload)
           return produce(state,(draft)=>{
-              console.log(draft.modules)
+              console.log("IMPORTAN")
+              console.log(state)
+              
 
               action.payload.da.forEach((element:any )=> {
                   const {id} = element
 
+                  console.log(id)
                   draft.modules[id] = element
               });
 
-              action.payload.custData.forEach((element:any) =>{
+             action.payload.custData.forEach((element:any) =>{
+                  console.log(element.id)
                   draft.custom[element.id] = element.data
-              });
+              }); 
 
           })
+
+    case RESET_PLANNER:
+        return produce(state,(draft)=>{
+            if (action.payload.modules){
+
+                draft.modules.length = 0 
+            }
+            if(action.payload.custom) {
+                draft.custom.length = 0
+            }
+        });
+
 
     case SET_PLANNER_MIN_YEAR:
       return {
@@ -114,17 +131,19 @@ export default function planner(
 
         // IMP stuff is here :)
         console.log({id,year,semester,index})
-        console.log(auth.currentUser!.uid);
 
 
 
 
-      if (auth.currentUser!==null){
+      if (auth.currentUser!==null||auth.currentUser !== undefined){
+
+          try{
         db.collection("users").doc(auth.currentUser!.uid).collection("planner").doc(
             id
         ).set(
             {id,year,semester,index,...props}, {merge:true})
             .then((e:any)=>{console.log("done")});
+          }catch(e){}
       }
 
       return produce(state,  (draft) => {
