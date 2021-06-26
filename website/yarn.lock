@@ -7368,7 +7368,7 @@ human-signals@^2.1.0:
 
 "ical-generator@https://github.com/nusmodifications/ical-generator.git#a2aa62ed":
   version "0.2.10"
-  resolved "git+ssh://git@github.com/nusmodifications/ical-generator.git#a2aa62ed82a7c947b3f02172ac2c8ed5a9e32eb8"
+  resolved "https://github.com/nusmodifications/ical-generator.git#a2aa62ed82a7c947b3f02172ac2c8ed5a9e32eb8"
 
 icalendar@0.7.1:
   version "0.7.1"
