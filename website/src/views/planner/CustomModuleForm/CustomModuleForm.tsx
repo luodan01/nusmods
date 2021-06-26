@@ -97,7 +97,6 @@ export const CustomModuleFormComponent: React.FC<Props> = (props) => {
   //   {letterGrade : "D", numberGrade: 1.0},
   //   {letterGrade : "F", numberGrade: 0.0},
   // ]
-  const [colour, setColour] = useState('#fff');
 
   return (
 

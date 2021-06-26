@@ -29,7 +29,6 @@ type Props = Readonly<{
   placeholder?: PlannerPlaceholder;
   conflict?: Conflict | null;
   semester?: Semester;
-  colour: string;
 
   // For draggable
   id: string;
@@ -46,6 +45,8 @@ type Props = Readonly<{
  */
 const PlannerModule = memo<Props>((props) => {
   const [isEditingPlaceholder, setEditingPlaceholder] = useState(false);
+
+  const [colour, setColour] = useState('#1f1e33')
 
   const removeModule = () => props.removeModule(props.id);
 
@@ -113,7 +114,7 @@ const PlannerModule = memo<Props>((props) => {
   };
 
   const renderMeta = () => {
-    const { moduleCredit, examDate, moduleGrade, colour } = props;
+    const { moduleCredit, examDate, moduleGrade} = props;
     
     if (!moduleCredit && !examDate && !moduleGrade && !colour) return null;
 
@@ -129,7 +130,7 @@ const PlannerModule = memo<Props>((props) => {
   };
 
   const renderPlaceholderForm = () => {
-    const { placeholder, moduleCode, moduleTitle, semester, colour } = props;
+    const { placeholder, moduleCode, moduleTitle, semester} = props;
 
     if (!placeholder) return null;
 
@@ -174,20 +175,20 @@ const PlannerModule = memo<Props>((props) => {
     );
   };
 
-  const { id, placeholder, moduleCode, moduleTitle, index, conflict, colour } = props;
+  const { id, placeholder, moduleCode, moduleTitle, index, conflict} = props;
 
   return (
     <Draggable key={moduleCode} draggableId={id} index={index}>
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
-          style={{backgroundColor: colour}}
+          style={{background: colour + "!important"}}
           className={classnames(styles.module, {
             [styles.warning]: conflict,
             [styles.isDragging]: snapshot.isDragging,
             [styles.placeholder]: placeholder && !moduleCode,
           })}
-          //{...provided.draggableProps}
+          {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
           <ModuleMenu removeModule={removeModule} editCustomData={editCustomData}/>
