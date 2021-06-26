@@ -211,7 +211,7 @@ const ModulePageContent: React.FC<Props> = ({ module, archiveYear }) => {
                 )}
 
                 {!isArchive && offered && (
-                  <div className={styles.addToTimetable}>
+                  <div className={styles.addToPlanner}>
                     <AddModuleToPlanner 
                       module={module} 
                       moduleData={

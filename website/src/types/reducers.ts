@@ -13,7 +13,6 @@ import {
 } from './modules';
 import { VenueList } from './venues';
 
-import { PlannerModuleInfo } from 'types/planner';
 import planToTake from 'views/planner/PlannerContainer';
 
 /* app.js */
