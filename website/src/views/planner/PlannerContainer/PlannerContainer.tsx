@@ -260,13 +260,13 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
             {this.state.showAllYears? "View All Years" : "View By Year"}
           </button>
 
-          <button
+          {/* <button
             className="btn btn-sm btn-outline-success"
             type="button"
             onClick={this.props.toggleFeedback}
           >
             Beta - Send Feedback
-          </button>
+          </button> */}
         </h1>
 
         <div className={styles.headerRight}>

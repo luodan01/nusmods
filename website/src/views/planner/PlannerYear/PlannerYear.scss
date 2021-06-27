@@ -11,7 +11,7 @@
 
   &.currentYear {
     //border: 1px solid rgba(theme-color(), 0.5);
-    background: var(--gray-lightest); //rgba(theme-color(), 0.1);
+    background: transparent; //var(--gray-lightest); //rgba(theme-color(), 0.1);
   }
 }
 
@@ -56,7 +56,9 @@
 }
 
 .semesterHeader {
-  margin-bottom: 0.2rem;
+  padding: 0.4rem;
+  //background-color: pink;
+  margin-bottom: 0rem;
   font-weight: bold;
   font-size: 0.9rem;
 }
