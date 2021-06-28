@@ -26,7 +26,7 @@ import {
 import { toggleFeedback } from 'actions/app';
 import { fetchModule } from 'actions/moduleBank';
 import { getAcadYearModules, getExemptions, getIBLOCs, getPlanToTake } from 'selectors/planner';
-import { Settings, Trash, User } from 'react-feather';
+import { Settings, Trash, User, ChevronDown, Download} from 'react-feather';
 import Title from 'views/components/Title';
 import LoadingSpinner from 'views/components/LoadingSpinner';
 import Modal from 'views/components/Modal';
@@ -221,7 +221,7 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
     return (
       <header className={styles.header}>
         <h1>
-            {auth.currentUser !== null ? `${auth.currentUser.displayName}'s ` : ""}Module Planner{' '} 
+            {auth.currentUser !== null ? `${auth.currentUser.displayName}'s ` : "Module"}Planner{' '} 
           {/* <button
             className="btn btn-sm btn-outline-success"
             type="button"
@@ -250,13 +250,25 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
           </button>
 
           <button
-            className="btn btn-outline-primary btn-svg"
+            className="btn btn-svg btn-outline-primary"
             type="button"
-            onClick={this.onToggleYearsShown}
+            onClick={() => {
+                this.resetModules(true,true)
+                this.updateModules()
+            }}
           >
-            <Repeat className="svg svg-small" />
-            {this.state.showAllYears? "View All Years" : "View By Year"}
+             Reset
           </button>
+
+          <button
+          className={classnames(styles.toggle, 'btn btn-outline-primary btn-svg')}
+          type="button"
+          onClick={this.onToggleYearsShown}
+        >
+          <Download className="svg svg-small" />
+          Download
+          <ChevronDown className={classnames(styles.chevron, 'svg-small')} />
+        </button>
 
 
           {this.state.currUser !== null ?
@@ -289,16 +301,6 @@ provider.setCustomParameters({ prompt: 'select_account' });
         </button>
         }
 
-          <button
-            className="btn btn-svg btn-outline-primary"
-            type="button"
-            onClick={() => {
-                this.resetModules(true,true)
-                this.updateModules()
-            }}
-          >
-             Reset
-          </button>
 
           <button
             className="btn btn-svg btn-outline-primary"
