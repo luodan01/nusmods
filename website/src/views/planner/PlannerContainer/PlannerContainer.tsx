@@ -222,6 +222,24 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
       <header className={styles.header}>
         <h1>
             {auth.currentUser !== null ? `${auth.currentUser.displayName}'s ` : ""}Module Planner{' '} 
+          {/* <button
+            className="btn btn-sm btn-outline-success"
+            type="button"
+            onClick={this.props.toggleFeedback}
+          >
+            Beta - Send Feedback
+          </button> */}
+        </h1>
+
+        <div className={styles.headerRight}>
+          <p className={styles.moduleStats}>
+            {count} {count === 1 ? 'module' : 'modules'} / {renderMCs(credits)} 
+          </p>
+          <p className={styles.moduleStats}>
+            CAP: {Number.isNaN(CAP) ? '-' :CAP.toFixed(2)}
+          </p>
+          
+
           <button
             className="btn btn-outline-primary btn-svg"
             type="button"
@@ -240,23 +258,7 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
             {this.state.showAllYears? "View All Years" : "View By Year"}
           </button>
 
-          {/* <button
-            className="btn btn-sm btn-outline-success"
-            type="button"
-            onClick={this.props.toggleFeedback}
-          >
-            Beta - Send Feedback
-          </button> */}
-        </h1>
 
-        <div className={styles.headerRight}>
-          <p className={styles.moduleStats}>
-            {count} {count === 1 ? 'module' : 'modules'} / {renderMCs(credits)} 
-          </p>
-          <p className={styles.moduleStats}>
-            CAP: {Number.isNaN(CAP) ? '-' :CAP.toFixed(2)}
-          </p>
-          
           {this.state.currUser !== null ?
 
 
