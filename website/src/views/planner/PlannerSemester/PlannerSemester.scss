@@ -8,18 +8,10 @@ $empty-message-height: 5rem;
   width: $semester-width;
   // Prevents the semester from collapsing at the start since all children are
   // absolute positioned
-  padding: 0.5rem;
   min-height: 24rem;
   margin: 0 $column-gutter 2rem 0;
-  border-left: 1px solid lightgrey;
-  border-right: 1px solid lightgrey;
-  border-bottom: 1px solid lightgrey;
-  margin-bottom: 0.4rem;
-  border-bottom: 0.15rem solid #d3d3d3;
-
 
   &.emptyList .addModule {
-    border: 5rem;
     position: absolute;
     top: $empty-message-height + 0.5rem;
   }
@@ -32,7 +24,6 @@ $empty-message-height: 5rem;
   color: var(--gray);
 
   p {
-    margin-top: 0.4rem;
     margin-bottom: 0;
   }
 }

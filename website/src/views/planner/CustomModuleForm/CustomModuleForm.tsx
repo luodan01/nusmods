@@ -34,6 +34,8 @@ export const CustomModuleFormComponent: React.FC<Props> = (props) => {
   const inputTitle = React.createRef<HTMLInputElement>();
   const inputModuleGrade = React.createRef<HTMLSelectElement>();
 
+  const [colour, setColour] = useState('#fff');
+
   const onSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
@@ -50,7 +52,8 @@ export const CustomModuleFormComponent: React.FC<Props> = (props) => {
     props.addCustomModule(props.moduleCode, {
       moduleCredit: +moduleCredit,
       title,
-      moduleGrade
+        moduleGrade,
+        colour
     });
 
     props.onFinishEditing();

@@ -109,6 +109,13 @@ export function getModuleTitle(
   return (customInfo && customInfo.title) || (moduleInfo && moduleInfo.title) || null;
 }
 
+// Color
+export function getModuleColor(module:Pick<PlannerModuleInfo, 'moduleInfo' | 'customInfo'>,){
+
+  const { moduleInfo, customInfo } = module;
+    return (customInfo && customInfo.colour && customInfo.colour.hex)
+}
+
 /**
  * Get a planner module's credits, preferring customInfo over moduleInfo.
  * This allows the user to override our data in case there are mistakes.

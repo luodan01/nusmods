@@ -13,7 +13,8 @@ import {
   getModuleTitle,
   getSemesterName,
   getTotalMC,
-  getSAP
+  getSAP,
+  getModuleColor
 } from 'utils/planner';
 import PlannerModule from '../PlannerModule/PlannerModule';
 
@@ -22,6 +23,7 @@ import styles from './PlannerSemester.scss';
 import PlannerContainer from '../PlannerContainer/PlannerContainer';
 
 type Props = {
+    colour:string;
   year: string;
   semester: Semester;
   modules: PlannerModuleInfo[];
@@ -57,7 +59,8 @@ function renderSemesterMeta(plannerModules: PlannerModuleInfo[]) {
  * Component for a single column of modules for a single semester
  */
 const PlannerSemester: React.FC<Props> = ({
-  year,
+    year,
+    colour,
   semester,
   modules,
   showModuleDetails,
@@ -76,6 +79,7 @@ const PlannerSemester: React.FC<Props> = ({
     return (
         <PlannerModule
         key={id}
+        colour={showModuleDetails ? getModuleColor(plannerModule): ""}
         id={id}
         index={index}
         moduleCode={moduleCode}

@@ -131,8 +131,8 @@ export const PlannerSettingsComponent: React.FC<Props> = (props) => {
           <p>
             Polytechnic diploma holders admitted to a 3 or 4-year programme may be granted 
             <ExternalLink href="https://www.nus.edu.sg/oam/apply-to-nus/polytechnic-diploma-from-singapore/module-exemptions
-"> advanced placement credits (APC)</ExternalLink> 
-            <br/>in relevant modules for up to a maximum of 40 MCs.
+"> advanced placement credits (APC)</ExternalLink> is a
+            in relevant modules for up to a maximum of 40 MCs.
           </p>
         </div>
 
