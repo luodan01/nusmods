@@ -26,7 +26,7 @@ import {
 import { toggleFeedback } from 'actions/app';
 import { fetchModule } from 'actions/moduleBank';
 import { getAcadYearModules, getExemptions, getIBLOCs, getPlanToTake } from 'selectors/planner';
-import { Settings, Trash, User } from 'react-feather';
+import { Settings, Trash, User, ChevronDown, Download, RefreshCcw } from 'react-feather';
 import Title from 'views/components/Title';
 import LoadingSpinner from 'views/components/LoadingSpinner';
 import Modal from 'views/components/Modal';
@@ -60,7 +60,7 @@ export type Props = Readonly<{
   toggleYears: () => void;
 
     addModule: (year: string, semester: Semester, module: AddModuleData) => void;
-    getModules:(modules:any,customData:any)=>void,
+    getModules:(modules:any,customData:any,iblocs:any,exempt:any,minYear:any,maxYear:any)=>void,
     resetPlanner:(modules:boolean,custom:boolean)=>void;
   moveModule: (id: string, year: string, semester: Semester, index: number) => void;
   removeModule: (id: string) => void;
@@ -95,17 +95,15 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
 
 
 
-    updateModules = ()=>{
+     updateModules =async ()=>{
       if (auth.currentUser!==null){
-      db.collection("users").doc(auth.currentUser!.uid).collection("planner").get()
-          .then(collection =>{
+     const collection =await  db.collection("users").doc(auth.currentUser!.uid).collection("planner").get()
               const mods :any[]= []
               collection.docs.forEach((doc)=>{
                   mods.push(doc.data())
               })
 
-              db.collection("users").doc(auth.currentUser!.uid).collection("custom").get()
-                  .then(custDatas=>{
+      const custDatas=await        db.collection("users").doc(auth.currentUser!.uid).collection("custom").get()
                       const customDataList :any[]=[];
 
                       custDatas.forEach(custDataDoc=>{
@@ -113,12 +111,21 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
                           customDataList.push({id,data:custDataDoc.data()})
                       })
 
-                      console.log(this.getModules(mods,customDataList))
-                  })
+
+
+          const docData = await db.collection("users").doc(auth.currentUser!.uid).get();
 
 
 
-          });
+        const data = docData.data();
+          if (data === undefined){
+              this.getModules(mods,customDataList,false,false,"","");
+          }
+          else{
+              console.log(data)
+              const {iblocs,exempt,minYear,maxYear} = data
+              console.log(this.getModules(mods,customDataList,iblocs,exempt,minYear,maxYear))
+          }
       }}
 
   componentDidMount() {
@@ -145,28 +152,7 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
     console.log(`Current User: ${auth.currentUser}`);
 
       if (auth.currentUser!==null){
-      db.collection("users").doc(auth.currentUser!.uid).collection("planner").get()
-          .then(collection =>{
-              const mods :any[]= []
-              collection.docs.forEach((doc)=>{
-                  mods.push(doc.data())
-              })
-
-              db.collection("users").doc(auth.currentUser!.uid).collection("custom").get()
-                  .then(custDatas=>{
-                      const customDataList :any[]=[];
-
-                      custDatas.forEach(custDataDoc=>{
-                          const id = custDataDoc.id
-                          customDataList.push({id,data:custDataDoc.data()})
-                      })
-
-                      console.log(this.getModules(mods,customDataList))
-                  })
-
-
-
-          });
+          this.updateModules()
       }
       else{
           this.resetModules(true,true)
@@ -178,8 +164,8 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
     resetModules=(modules:boolean,custom:boolean)=>{
         this.props.resetPlanner(modules,custom)
     }
-    getModules=(mods:any,custData:any)=>{
-        this.props.getModules(mods,custData)
+    getModules=(mods:any,custData:any,iblocs:any,exempt:any,minYear:any,maxYear:any)=>{
+        this.props.getModules(mods,custData,iblocs,exempt,minYear,maxYear)
     };
 
   onAddModule = (year: string, semester: Semester, module: AddModuleData) => {
@@ -241,7 +227,7 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
     return (
       <header className={styles.header}>
         <h1>
-            {auth.currentUser !== null ? `${auth.currentUser.displayName}'s ` : ""}Module Planner{' '} 
+        {auth.currentUser !== null ? `${auth.currentUser.displayName}'s ` : "Module"}Planner{' '}
           <button
             className="btn btn-outline-primary btn-svg"
             type="button"
@@ -260,13 +246,6 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
             {this.state.showAllYears? "View All Years" : "View By Year"}
           </button>
 
-          <button
-            className="btn btn-sm btn-outline-success"
-            type="button"
-            onClick={this.props.toggleFeedback}
-          >
-            Beta - Send Feedback
-          </button>
         </h1>
 
         <div className={styles.headerRight}>
@@ -276,6 +255,18 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
           <p className={styles.moduleStats}>
             CAP: {Number.isNaN(CAP) ? '-' :CAP.toFixed(2)}
           </p>
+
+          <button
+            className="btn btn-svg btn-outline-primary"
+            type="button"
+            onClick={() => {
+                this.resetModules(true,true)
+                this.updateModules()
+            }}
+          >
+            <RefreshCcw className="svg svg-small" />  Reset
+          </button>
+
           
           {this.state.currUser !== null ?
 
@@ -306,17 +297,6 @@ provider.setCustomParameters({ prompt: 'select_account' });
             <User className="svg svg-small" /> Login
         </button>
         }
-
-          <button
-            className="btn btn-svg btn-outline-primary"
-            type="button"
-            onClick={() => {
-                this.resetModules(true,true)
-                this.updateModules()
-            }}
-          >
-             Reset
-          </button>
 
           <button
             className="btn btn-svg btn-outline-primary"

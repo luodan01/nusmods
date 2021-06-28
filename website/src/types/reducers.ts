@@ -13,6 +13,7 @@ import {
 } from './modules';
 import { VenueList } from './venues';
 
+import { PlannerModuleInfo } from 'types/planner';
 import planToTake from 'views/planner/PlannerContainer';
 
 /* app.js */
@@ -153,6 +154,7 @@ export type CustomModule = {
   readonly title?: string | null;
   readonly moduleCredit: number;
   readonly moduleGrade?: string | null;
+    readonly colour: string|null;
 };
 
 export type CustomModuleData = {

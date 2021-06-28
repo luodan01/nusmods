@@ -97,10 +97,11 @@ export function addCustomModule(moduleCode: ModuleCode, data: CustomModule) {
 }
 
 export const GET_ALL_PLANNER = "GET_ALL_PLANNER" as const;
-export function getAllPlanner(da:any,custData:any){
+export function getAllPlanner(da:any,custData:any,iblocs:any,
+exempt:any,minYear:any,maxYear:any){
     return{
         type: GET_ALL_PLANNER,
-        payload:{da,custData}
+        payload:{da,custData,iblocs,exempt,minYear,maxYear}
     }
 }
 
