@@ -5,6 +5,7 @@ import { createMigrate, PersistedState } from 'redux-persist';
 import { PlannerState } from 'types/reducers';
 import { Actions } from 'types/actions';
 import { Semester } from 'types/modules';
+import { PlannerModulesWithInfo, PlannerModuleInfo } from 'types/planner';
 
 import {
   ADD_CUSTOM_PLANNER_DATA,
@@ -22,7 +23,6 @@ import {
 import { filterModuleForSemester } from 'selectors/planner';
 import config from 'config';
 import {auth, db} from 'firebaseConfig';
-import {ca} from 'date-fns/locale';
 
 const defaultPlannerState: PlannerState = {
   minYear: config.academicYear,
@@ -85,11 +85,6 @@ export default function planner(
                   draft.custom[element.id] = element.data
               }); 
 
-              draft.iblocs = action.payload.iblocs;
-              draft.exempt = action.payload.exempt;
-              draft.minYear = action.payload.minYear;
-              draft.maxYear = action.payload.maxYear;
-
           })
 
     case RESET_PLANNER:
@@ -104,17 +99,8 @@ export default function planner(
         });
 
 
-          //TODO min and max yr
     case SET_PLANNER_MIN_YEAR:
 
-
-      if (auth.currentUser!==null||auth.currentUser !== undefined){
-          db.collection("users").doc(auth.currentUser!.uid).set({
-        minYear: action.payload,
-        maxYear: max([action.payload, state.maxYear]) as string,
-
-          }, {merge:true})
-      }
       return {
         ...state,
         minYear: action.payload,
@@ -122,13 +108,6 @@ export default function planner(
       };
 
     case SET_PLANNER_MAX_YEAR:
-      if (auth.currentUser!==null||auth.currentUser !== undefined){
-
-          db.collection("users").doc(auth.currentUser!.uid).set({
-            maxYear: action.payload,
-            minYear: min([action.payload, state.minYear]) as string,
-          }, {merge:true})
-      }
       return {
         ...state,
         maxYear: action.payload,
@@ -136,23 +115,9 @@ export default function planner(
       };
 
     case SET_PLANNER_IBLOCS:
-      if (auth.currentUser!==null||auth.currentUser !== undefined){
-          try{
-              db.collection("users").doc(auth.currentUser!.uid).set({iblocs:action.payload}, {merge:true});
-          } catch(e){
-
-          }
-      }
       return { ...state, iblocs: action.payload };
 
     case SET_PLANNER_EXEMPTIONS:
-      if (auth.currentUser!==null||auth.currentUser !== undefined){
-          try{
-              db.collection("users").doc(auth.currentUser!.uid).set({exempt:action.payload}, {merge:true});
-          } catch(e){
-
-          }
-      }
       return { ...state, exempt: action.payload };  
 
     case ADD_PLANNER_MODULE: {

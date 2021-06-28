@@ -227,7 +227,7 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
     return (
       <header className={styles.header}>
         <h1>
-        {auth.currentUser !== null ? `${auth.currentUser.displayName}'s ` : "Module"}Planner{' '}
+        {auth.currentUser !== null ? `${auth.currentUser.displayName}'s ` : "Module "}Planner{' '}
           <button
             className="btn btn-outline-primary btn-svg"
             type="button"
