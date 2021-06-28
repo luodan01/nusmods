@@ -59,9 +59,9 @@ export type Props = Readonly<{
   toggleModuleDetails: () => void;
   toggleYears: () => void;
 
-  addModule: (year: string, semester: Semester, module: AddModuleData) => void;
-  getModules:(modules:any,customData:any)=>void,
-  resetPlanner:(modules:boolean,custom:boolean)=>void;
+    addModule: (year: string, semester: Semester, module: AddModuleData) => void;
+    getModules:(modules:any,customData:any)=>void,
+    resetPlanner:(modules:boolean,custom:boolean)=>void;
   moveModule: (id: string, year: string, semester: Semester, index: number) => void;
   removeModule: (id: string) => void;
   setPlaceholderModule: (id: string, moduleCode: ModuleCode) => void;
@@ -251,14 +251,14 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
             {this.state.showModuleDetails? 'Hide Details' : 'Show Details'}
           </button>
 
-          {/* <button
+          <button
             className="btn btn-outline-primary btn-svg"
             type="button"
             onClick={this.onToggleYearsShown}
           >
             <Repeat className="svg svg-small" />
             {this.state.showAllYears? "View All Years" : "View By Year"}
-          </button> */}
+          </button>
 
           <button
             className="btn btn-sm btn-outline-success"
