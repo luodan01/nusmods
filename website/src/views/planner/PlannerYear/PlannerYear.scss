@@ -4,15 +4,16 @@
 .year {
   display: flex;
   flex-direction: column;
-  padding: 0.6rem 1.2rem;
-  margin-right: $column-gutter;
-  border-radius: 0.5rem;
-  background: var(--gray-lightest);
+  // padding: 0.6rem 1.2rem;
+  margin: $column-gutter;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  // border-radius: 0.5rem;
+  // background: var(--gray-lightest);
 
-  &.currentYear {
-    //border: 1px solid rgba(theme-color(), 0.5);
-    background: var(--gray-lightest); //rgba(theme-color(), 0.1);
-  }
+  // &.currentYear {
+  //   //border: 1px solid rgba(theme-color(), 0.5);
+  //   // background: var(--gray-lightest); //rgba(theme-color(), 0.1);
+  // }
 }
 
 .yearHeader {
@@ -20,7 +21,11 @@
   opacity: 0.7;
   justify-content: space-between;
   align-items: center;
+  vertical-align: text-bottom;
   margin-bottom: 1rem;
+  background-color: pink;
+  padding: 1rem 1.2rem;
+  color: black;
 
   h2,
   p {
@@ -48,6 +53,7 @@
   display: flex;
   flex: 1 1 auto;
   margin-right: -$column-gutter;
+  padding: 0.6rem 1.2rem;
 }
 
 .semesterWrapper {

@@ -26,7 +26,7 @@ import {
 import { toggleFeedback } from 'actions/app';
 import { fetchModule } from 'actions/moduleBank';
 import { getAcadYearModules, getExemptions, getIBLOCs, getPlanToTake } from 'selectors/planner';
-import { Settings, Trash, User, ChevronDown, Download} from 'react-feather';
+import { Settings, Trash, User, ChevronDown, Download, RefreshCcw } from 'react-feather';
 import Title from 'views/components/Title';
 import LoadingSpinner from 'views/components/LoadingSpinner';
 import Modal from 'views/components/Modal';
@@ -114,12 +114,18 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
 
 
           const docData = await db.collection("users").doc(auth.currentUser!.uid).get();
-          const {iblocs,exempt,minYear,maxYear} = docData.data()!;
 
+
+
+        const data = docData.data();
+          if (data === undefined){
+              this.getModules(mods,customDataList,false,false,"","");
+          }
+          else{
+              console.log(data)
+              const {iblocs,exempt,minYear,maxYear} = data
               console.log(this.getModules(mods,customDataList,iblocs,exempt,minYear,maxYear))
-
-
-
+          }
       }}
 
   componentDidMount() {
@@ -221,25 +227,7 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
     return (
       <header className={styles.header}>
         <h1>
-            {auth.currentUser !== null ? `${auth.currentUser.displayName}'s ` : "Module"}Planner{' '} 
-          {/* <button
-            className="btn btn-sm btn-outline-success"
-            type="button"
-            onClick={this.props.toggleFeedback}
-          >
-            Beta - Send Feedback
-          </button> */}
-        </h1>
-
-        <div className={styles.headerRight}>
-          <p className={styles.moduleStats}>
-            {count} {count === 1 ? 'module' : 'modules'} / {renderMCs(credits)} 
-          </p>
-          <p className={styles.moduleStats}>
-            CAP: {Number.isNaN(CAP) ? '-' :CAP.toFixed(2)}
-          </p>
-          
-
+        {auth.currentUser !== null ? `${auth.currentUser.displayName}'s ` : "Module"}Planner{' '}
           <button
             className="btn btn-outline-primary btn-svg"
             type="button"
@@ -250,6 +238,25 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
           </button>
 
           <button
+            className="btn btn-outline-primary btn-svg"
+            type="button"
+            onClick={this.onToggleYearsShown}
+          >
+            <Repeat className="svg svg-small" />
+            {this.state.showAllYears? "View All Years" : "View By Year"}
+          </button>
+
+        </h1>
+
+        <div className={styles.headerRight}>
+          <p className={styles.moduleStats}>
+            {count} {count === 1 ? 'module' : 'modules'} / {renderMCs(credits)} 
+          </p>
+          <p className={styles.moduleStats}>
+            CAP: {Number.isNaN(CAP) ? '-' :CAP.toFixed(2)}
+          </p>
+
+          <button
             className="btn btn-svg btn-outline-primary"
             type="button"
             onClick={() => {
@@ -257,20 +264,10 @@ class PlannerContainerComponent extends PureComponent<Props, State> {
                 this.updateModules()
             }}
           >
-             Reset
+            <RefreshCcw className="svg svg-small" />  Reset
           </button>
 
-          <button
-          className={classnames(styles.toggle, 'btn btn-outline-primary btn-svg')}
-          type="button"
-          onClick={this.onToggleYearsShown}
-        >
-          <Download className="svg svg-small" />
-          Download
-          <ChevronDown className={classnames(styles.chevron, 'svg-small')} />
-        </button>
-
-
+          
           {this.state.currUser !== null ?
 
 
@@ -300,7 +297,6 @@ provider.setCustomParameters({ prompt: 'select_account' });
             <User className="svg svg-small" /> Login
         </button>
         }
-
 
           <button
             className="btn btn-svg btn-outline-primary"
