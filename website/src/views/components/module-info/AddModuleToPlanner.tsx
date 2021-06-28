@@ -49,7 +49,7 @@ export class AddModuleToPlannerComponent extends PureComponent<Props, State> {
 
   buttonLabel(semester: Semester) {
     if (this.state.loading === semester) {
-      return 'Added!';
+      return 'Added to Plan to Take modules!';
     }
 
     return (

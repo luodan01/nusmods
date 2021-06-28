@@ -29,7 +29,7 @@ type Props = Readonly<{
   placeholder?: PlannerPlaceholder;
   conflict?: Conflict | null;
   semester?: Semester;
-  colour: string;
+  colour?: string;
 
   // For draggable
   id: string;
@@ -146,7 +146,7 @@ const PlannerModule = memo<Props>((props) => {
             {moduleCode || 'Select Module'} <ChevronDown />
           </button>{' '}
           {moduleCode && moduleTitle && (
-            <Link to={modulePage(moduleCode, moduleTitle)}>{moduleTitle}</Link>
+            <Link to={modulePage(moduleCode, moduleTitle)}><br/>{moduleTitle}</Link>
           )}
         </>
       );
@@ -202,7 +202,8 @@ const PlannerModule = memo<Props>((props) => {
               ) : (
                 moduleCode && (
                   <Link className="d-block" to={modulePage(moduleCode, moduleTitle)}>
-                    <strong>{moduleCode}</strong> {moduleTitle}
+                    <p style={{fontSize:19}}><strong>{moduleCode}</strong></p> 
+                    {moduleTitle}
                   </Link>
                 )
               )}

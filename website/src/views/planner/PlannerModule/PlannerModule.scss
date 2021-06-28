@@ -2,19 +2,19 @@
 @import '../variables';
 
 .module {
-  padding: $module-padding-v $module-padding-h;
-  margin-bottom: 0.4rem;
-  border-bottom: 0.15rem solid #d3d3d3; //@EDITED changed from darken(theme-color('success'), 10);
-  border-radius: 0.35rem;
-  font-size: 0.9rem;
+  // padding: $module-padding-v $module-padding-h;
+  padding: 0.6rem 1.2rem 0.3rem 1.2rem;
+  border-bottom: 0.11rem dashed #bbbbbb; //@EDITED changed from darken(theme-color('success'), 10);
+  // border-radius: 0.35rem;
+  font-size: 0.75rem;
   line-height: 1.3;
-  color: 	darken(theme-color('success'), 30);
+  color: darken(theme-color('success'), 30);
   background: #fff; //@EDITED changed from lighten(theme-color('success'), 3);
 
   &.warning {
-    border-color: darken(theme-color('warning'), 10);
+    // border-color: darken(theme-color('warning'), 10);
     color: darken(theme-color('warning'), 40);
-    background: theme-color('warning');
+    background: lighten(theme-color('warning'), 40);
 
     .menuBtn :global(.close) {
       color: #000;
@@ -27,16 +27,17 @@
   }
 
   &.placeholder {
-    $stripe-light: lighten(theme-color('success'), 3.5);
-    $stripe-dark: darken(theme-color('success'), 0.5);
+    // $stripe-light: lighten(theme-color('success'), 3.5);
+    // $stripe-dark: darken(theme-color('success'), 0.5);
+    background: lighten(theme-color('success'), 40);
 
-    background-image: repeating-linear-gradient(
-      130deg,
-      $stripe-light,
-      $stripe-light 1rem,
-      $stripe-dark 1rem,
-      $stripe-dark 2rem
-    );
+    // background-image: repeating-linear-gradient(
+    //   130deg,
+    //   $stripe-light,
+    //   $stripe-light 1rem,
+    //   $stripe-dark 1rem,
+    //   $stripe-dark 2rem
+    // );
   }
 }
 
@@ -61,7 +62,7 @@
   display: flex;
   opacity: 0.8;
   justify-content: space-between;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
 }
 
 .moduleInfo {
@@ -69,7 +70,7 @@
 }
 
 .moduleName {
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.2rem;
 
   a {
     color: inherit;
@@ -117,7 +118,8 @@
   resize: none;
 
   &::placeholder {
-    color: rgba(#fff, 0.5);
+    color: black;
+    // color: rgba(#fff, 0.5);
   }
 }
 
@@ -147,4 +149,9 @@
 .prereqs {
   padding: 0;
   margin: 0 0 0.2rem 1rem;
+}
+
+p {
+  margin: 0;
+  padding: 0;
 }

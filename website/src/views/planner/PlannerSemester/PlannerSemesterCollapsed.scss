@@ -9,7 +9,8 @@ $empty-message-height: 3rem;
   // Prevents the semester from collapsing at the start since all children are
   // absolute positioned
   min-height: 18rem;
-  margin: 0 $column-gutter 2rem 0;
+  // margin: 0 $column-gutter 2rem 0;
+  margin: 0 0 2rem 0;
 
   &.emptyList .addModule {
     position: absolute;
@@ -22,6 +23,8 @@ $empty-message-height: 3rem;
   justify-content: space-between;
   font-size: 0.8rem;
   color: var(--gray);
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 
   p {
     margin-bottom: 0;

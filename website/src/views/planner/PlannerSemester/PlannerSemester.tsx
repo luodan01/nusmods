@@ -72,7 +72,7 @@ const PlannerSemester: React.FC<Props> = ({
     const { id, moduleCode, moduleInfo, conflict, placeholder } = plannerModule;
 
     const showExamDate = showModuleDetails && config.academicYear === year;
-
+    
     return (
         <PlannerModule
         key={id}

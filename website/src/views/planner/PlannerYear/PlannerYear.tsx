@@ -40,29 +40,29 @@ export default class PlannerYear extends PureComponent<Props, State> {
     return size(semesters[3]) > 0 || size(semesters[4]) > 0;
   }
 
-  renderHeader() {
-    const { year, name, semesters } = this.props;
-    const modules = flatMap(semesters, values);
-    const credits = getTotalMC(modules);
-    const CAP = getSAP(modules);
-    const count = modules.length;
+  // renderHeader() {
+  //   const { year, name, semesters } = this.props;
+  //   const modules = flatMap(semesters, values);
+  //   const credits = getTotalMC(modules);
+  //   const CAP = getSAP(modules);
+  //   const count = modules.length;
 
-    return (
-      <header className={styles.yearHeader}>
-        <h2>
-          {name} <span className={styles.acadYear}>{year}</span>
-        </h2>
-        <div className={styles.yearMeta}>
-          <p>
-            {count} {count === 1 ? 'module' : 'modules'} / {renderMCs(credits)}
-          </p>
-        </div>
-      </header>
-    );
-  }
+  //   return (
+  //     <header className={styles.yearHeader}>
+  //       <h2>
+  //         {name} <span className={styles.acadYear}>{year}</span>
+  //       </h2>
+  //       <div className={styles.yearMeta}>
+  //         <p>
+  //           {count} {count === 1 ? 'module' : 'modules'} / {renderMCs(credits)}
+  //         </p>
+  //       </div>
+  //     </header>
+  //   );
+  // }
 
   render() {
-    const { year, semesters } = this.props;
+    const { name, year, semesters} = this.props;
     const { showSpecialSem } = this.state;
 
     // Only show the toggle if special terms are currently empty
@@ -80,12 +80,23 @@ export default class PlannerYear extends PureComponent<Props, State> {
           [styles.currentYear]: year === config.academicYear,
         })}
       >
-        {this.renderHeader()}
+        {/* {this.renderHeader()} */}
 
         <div className={styles.semesters}>
           {sortedSemesters.map(([semester, modules]) => (
             <div className={styles.semesterWrapper} key={semester}>
-              <h3 className={styles.semesterHeader}>{getSemesterName(+semester)}</h3>
+              <h3 className={classnames(styles.semesterYearHeader, {
+                [styles.firstYear]: name === "Year 1" || name === "Year 5",
+                [styles.secondYear]: name === "Year 2" || name === "Year 6",
+                [styles.thirdYear]: name === "Year 3",
+                [styles.forthYear]: name === "Year 4",
+              })}>{name}</h3>
+              <h3 className={classnames(styles.semesterHeader, {
+                [styles.firstYear]: name === "Year 1" || name === "Year 5",
+                [styles.secondYear]: name === "Year 2"|| name === "Year 6",
+                [styles.thirdYear]: name === "Year 3",
+                [styles.forthYear]: name === "Year 4",
+              })}>{getSemesterName(+semester)}</h3>
               <PlannerSemester
                 year={year}
                 semester={+semester}
